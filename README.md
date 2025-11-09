@@ -85,25 +85,6 @@ Client Repo: [GitHub link]
 
 Server Repo: [GitHub link]
 
-## 📂 Project Structure
-
-eco-track-client/
-├── components/       # Navbar, Footer, Cards
-├── layouts/          # PublicLayout, DashboardLayout
-├── pages/            # Home, Challenges, MyActivities, Auth
-├── routes/           # AppRoutes, ProtectedRoute
-├── context/          # AuthContext (Firebase)
-├── services/         # Axios instance
-├── utils/            # Toasts, validators
-└── App.jsx, main.jsx
-
-eco-track-server/
-├── controllers/      # Logic for each resource
-├── models/           # Mongoose schemas
-├── routes/           # API endpoints
-├── middlewares/      # Auth, error handling
-├── utils/            # DB connection, Firebase Admin
-└── app.js, server.js
 
 ## 🧠 Optional Enhancements
 
@@ -119,10 +100,14 @@ eco-track-server/
 
 # Client
 cd eco-track-client
+
 npm install
+
 npm run dev
 
 # Server
 cd eco-track-server
+
 npm install
+
 npm run dev
