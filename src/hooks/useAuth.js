@@ -10,9 +10,9 @@ import {
   updateProfile,
 } from "firebase/auth"
 import { Bounce, toast } from "react-toastify"
+import { auth } from "../services/firebaseConfig"
 
 import { useEffect, useState } from "react";
-import { auth } from "../services/firebaseConfig";
 
 const googleProvider = new GoogleAuthProvider()
 const githubProvider = new GithubAuthProvider()

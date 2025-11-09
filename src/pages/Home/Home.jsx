@@ -1,11 +1,13 @@
-import React from 'react';
+import Container from "../../components/Container";
 
-const Home = () => {
+
+export default function Home() {
   return (
-    <div>
-      <h1 className='font-Poppins'>Home Page</h1>
-    </div>
-  );
-};
-
-export default Home;
+    <Container>
+      <h1 className="text-4xl font-heading">Welcome to EcoTrack</h1>
+      <p className="mt-2 text-base font-body">
+        Track your impact and join green challenges.
+      </p>
+    </Container>
+  )
+}

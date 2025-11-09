@@ -7,7 +7,7 @@ export default function MyLink({ to, children, className = "", ...rest }) {
       {...rest}
       className={({ isActive }) =>
         `${
-          isActive ? "bg-primary text-white" : "text-primary"
+          isActive ? "bg-primary font-semibold text-white" : "text-primary font-semibold hover:bg-primary hover:text-white"
         } ${className}`
       }
     >
