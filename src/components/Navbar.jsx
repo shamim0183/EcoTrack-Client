@@ -1,48 +1,100 @@
-import { Link } from "react-router"
-import { useContext } from "react"
+import React, { useContext, useState } from "react"
+import { Link, useNavigate } from "react-router"
 import { AuthContext } from "../context/AuthContext"
 import MyLink from "./MyLink"
-import Container from "./Container"
 import logo from "../assets/logo.png"
 
-export default function Navbar() {
-  const { user, logout } = useContext(AuthContext)
+const navLinks = [
+  { label: "Home", to: "/" },
+  { label: "Challenges", to: "/challenges" },
+  { label: "My Activities", to: "/my-activities" },
+]
 
-  const navLinks = (
-    <>
-      <li>
-        <MyLink to="/">Home</MyLink>
-      </li>
-      <li>
-        <MyLink to="/challenges">Challenges</MyLink>
-      </li>
-      <li>
-        <MyLink to="/my-activities">My Activities</MyLink>
-      </li>
-    </>
-  )
+const Navbar = () => {
+  const { user, logout, loading } = useContext(AuthContext)
+  const [showName, setShowName] = useState(false)
+  const navigate = useNavigate()
+
+  const handleLogout = async () => {
+    await logout()
+    navigate("/login", { replace: true })
+  }
 
   return (
-    <div className=" navbar bg-base-100 shadow-md">
-      {/* Logo */}
-      <div className="max-w-7xl mx-auto navbar px-4 w-full">
+    <header className="sticky top-0 z-50 bg-base-100 shadow-md">
+      <div className="navbar px-4 flex items-center justify-between max-w-7xl mx-auto">
+        {/* Left: Logo + Mobile Dropdown */}
         <div className="navbar-start">
+          <div className="dropdown">
+            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h8m-8 6h16"
+                />
+              </svg>
+            </div>
+            <ul
+              tabIndex={-1}
+              className="menu menu-sm dropdown-content mt-3 z-1 p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              {navLinks.map(({ label, to }) => (
+                <li key={label}>
+                  <MyLink to={to}>{label}</MyLink>
+                </li>
+              ))}
+              {!user ? (
+                <>
+                  <li>
+                    <MyLink to="/login">Login</MyLink>
+                  </li>
+                  <li>
+                    <MyLink to="/register">Register</MyLink>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <MyLink to="/profile">Profile</MyLink>
+                  </li>
+                  <li>
+                    <button onClick={handleLogout}>Logout</button>
+                  </li>
+                </>
+              )}
+            </ul>
+          </div>
+
           <Link
             to="/"
-            className="flex items-center text-xl font-bold text-primary"
+            className="flex items-center gap-2 font-bold text-xl text-primary animate__animated animate__fadeInDown"
           >
-            <img src={logo} alt="EcoTrack Logo" className="w-12 h-12" />
-            <span className="font-Playfair font-bold text-2xl">EcoTrack</span>
+            <img src={logo} alt="EcoTrack Logo" className="w-10 h-10" />
+            <span className="font-Playfair text-2xl">EcoTrack</span>
           </Link>
         </div>
 
-        {/* Desktop Menu */}
+        {/* Center: Desktop Nav */}
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1 gap-2">{navLinks}</ul>
+          <ul className="menu menu-horizontal px-1 flex gap-4 items-center">
+            {navLinks.map(({ label, to }) => (
+              <li key={label}>
+                <MyLink to={to}>{label}</MyLink>
+              </li>
+            ))}
+          </ul>
         </div>
 
-        {/* Right Side */}
-        <div className="navbar-end flex items-center gap-4">
+        {/* Right: Theme + Auth */}
+        <div className="navbar-end gap-4">
           {/* Theme Toggle */}
           <label className="flex cursor-pointer gap-2 items-center">
             <svg
@@ -78,7 +130,34 @@ export default function Navbar() {
           </label>
 
           {/* Auth Buttons or Avatar */}
-          {!user ? (
+          {loading ? (
+            <span className="loading loading-spinner text-primary"></span>
+          ) : user ? (
+            <>
+              <div
+                className="relative"
+                onMouseEnter={() => setShowName(true)}
+                onMouseLeave={() => setShowName(false)}
+              >
+                <img
+                  src={user.photoURL || "/default-avatar.png"}
+                  alt="avatar"
+                  className="w-10 h-10 rounded-full border-2 border-primary cursor-pointer object-cover"
+                />
+                {showName && (
+                  <div className="absolute top-12 left-1/2 -translate-x-1/2 bg-base-200 text-sm px-3 py-1 rounded shadow whitespace-nowrap">
+                    {user.displayName}
+                  </div>
+                )}
+              </div>
+              <button
+                onClick={handleLogout}
+                className="btn btn-outline btn-primary animate__animated animate__bounceIn"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
             <div className="hidden lg:flex gap-2">
               <MyLink to="/login" className="btn btn-sm btn-outline">
                 Login
@@ -87,82 +166,11 @@ export default function Navbar() {
                 Register
               </MyLink>
             </div>
-          ) : (
-            <div className="dropdown dropdown-end">
-              <label tabIndex={0} className="btn btn-sm btn-ghost avatar">
-                <div className="w-8 rounded-full">
-                  <img
-                    src={user.photoURL || "/default-avatar.png"}
-                    alt="avatar"
-                  />
-                </div>
-              </label>
-              <ul
-                tabIndex={0}
-                className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
-              >
-                <li>
-                  <MyLink to="/profile">Profile</MyLink>
-                </li>
-                <li>
-                  <MyLink to="/my-activities">My Activities</MyLink>
-                </li>
-                <li>
-                  <button onClick={logout}>Logout</button>
-                </li>
-              </ul>
-            </div>
           )}
         </div>
-
-        {/* Mobile Menu */}
-        <div className="lg:hidden dropdown dropdown-end">
-          <label tabIndex={0} className="btn btn-ghost">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </label>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
-          >
-            {navLinks}
-            {!user ? (
-              <>
-                <li>
-                  <MyLink to="/login">Login</MyLink>
-                </li>
-                <li>
-                  <MyLink to="/register">Register</MyLink>
-                </li>
-              </>
-            ) : (
-              <>
-                <li>
-                  <MyLink to="/profile">Profile</MyLink>
-                </li>
-                <li>
-                  <MyLink to="/my-activities">My Activities</MyLink>
-                </li>
-                <li>
-                  <button onClick={logout}>Logout</button>
-                </li>
-              </>
-            )}
-          </ul>
-        </div>
       </div>
-    </div>
+    </header>
   )
 }
+
+export default Navbar
