@@ -1,88 +1,69 @@
-🌱 EcoTrack
-EcoTrack is a community-driven sustainability platform where eco-conscious individuals can discover and join green challenges, share practical tips, track their environmental impact, and explore local eco-events. Built with the MERN stack and Firebase Auth, EcoTrack promotes measurable, collective progress toward a greener future.
+# 🌱 EcoTrack
 
-🛠️ Tech Stack
+**EcoTrack** is a community-driven sustainability platform where eco-conscious individuals can discover and join green challenges, share practical tips, track their environmental impact, and explore local eco-events. Built with the MERN stack and Firebase Auth, EcoTrack promotes measurable, collective progress toward a greener future.
+
+---
+
+## 🛠️ Tech Stack
+
 Built with modern tools from the React and Node.js ecosystem:
 
-React + React Router – SPA with protected and public routes
+- **React + React Router** – SPA with protected and public routes  
+- **Tailwind CSS + DaisyUI** – utility-first styling with accessible components  
+- **Firebase Auth** – email/password + Google login  
+- **Axios** – secure API communication with interceptors  
+- **Express.js + MongoDB** – RESTful backend with Mongoose models  
+- **React Toastify** – toast notifications for UX feedback  
+- **Vercel + Netlify** – deployment for server and client respectively  
 
-Tailwind CSS + DaisyUI – utility-first styling with accessible components
+---
 
-Firebase Auth – email/password + Google login
+## 📱 Features
 
-Axios – secure API communication with interceptors
+- 🔐 **Authentication System**  
+  Firebase Auth with email/password and Google login. Auth state is globally managed and protected routes are enforced.
 
-Express.js + MongoDB – RESTful backend with Mongoose models
+- 🧭 **Dynamic Routing & Layouts**  
+  Public and dashboard layouts with intuitive navigation and mobile responsiveness.
 
-React Toastify – toast notifications for UX feedback
+- 🧩 **Challenge System**  
+  Users can browse, join, and track progress on sustainability challenges like "Plastic-Free July" or "Energy Saver Week".
 
-Vercel + Netlify – deployment for server and client respectively
+- 🧠 **Tips & Events**  
+  Community-submitted eco-tips and upcoming green events are dynamically fetched from the database.
 
-📱 Features
-🔐 Authentication System Firebase Auth with email/password and Google login. Auth state is globally managed and protected routes are enforced.
+- 📊 **Live Stats & Progress Tracking**  
+  Real-time community impact metrics and personal challenge dashboards.
 
-🧭 Dynamic Routing & Layouts Public and dashboard layouts with intuitive navigation and mobile responsiveness.
+- 🧼 **Clean UX**  
+  Skeleton loaders, global spinners, toast messages, and a custom 404 page ensure a smooth experience.
 
-🧩 Challenge System Users can browse, join, and track progress on sustainability challenges like "Plastic-Free July" or "Energy Saver Week".
+---
 
-🧠 Tips & Events Community-submitted eco-tips and upcoming green events are dynamically fetched from the database.
+## 🔐 Pages Included
 
-📊 Live Stats & Progress Tracking Real-time community impact metrics and personal challenge dashboards.
+- Home *(dynamic sections: hero, stats, challenges, tips, events)*  
+- Challenges *(browse, detail, join)*  
+- My Activities *(dashboard with progress tracking)*  
+- Add Challenge *(admin/user submission)*  
+- Login / Register *(with validation and loading states)*  
+- Forgot Password *(link only)*  
+- 404 Error Page  
 
-🧼 Clean UX Skeleton loaders, global spinners, toast messages, and a custom 404 page ensure a smooth experience.
+---
 
-🔐 Pages Included
-Home (dynamic sections: hero, stats, challenges, tips, events)
+## 🧱 Backend API
 
-Challenges (browse, detail, join)
-
-My Activities (dashboard with progress tracking)
-
-Add Challenge (admin/user submission)
-
-Login / Register (with validation and loading states)
-
-Forgot Password (link only)
-
-404 Error Page
-
-🧱 Backend API
 Built with Express.js and MongoDB, the API supports:
 
-CRUD for Challenges, Tips, Events
+- CRUD for **Challenges**, **Tips**, **Events**  
+- Join & track progress via **UserChallenges**  
+- Advanced filtering (category, date, participants)  
+- Firebase Admin SDK (optional) for secure route protection  
 
-Join & track progress via UserChallenges
 
-Advanced filtering (category, date, participants)
 
-Firebase Admin SDK (optional) for secure route protection
-
-🧩 Collections & Sample Schema
-js
-// Challenge
-{
-  title, category, description, duration, target,
-  participants, impactMetric, createdBy,
-  startDate, endDate, imageUrl
-}
-
-// UserChallenge
-{
-  userId, challengeId, status, progress, joinDate
-}
-
-// Tip
-{
-  title, content, category, author, authorName,
-  upvotes, createdAt
-}
-
-// Event
-{
-  title, description, date, location,
-  organizer, maxParticipants, currentParticipants
-}
-🧪 UI/UX Highlights
+## 🧪 UI/UX Highlights
 Consistent typography, spacing, and button styles
 
 Responsive grid layouts and equal-height cards
@@ -93,7 +74,7 @@ Custom toast messages (no default alerts)
 
 Mobile-first design with hamburger menu
 
-🚀 Deployment
+## 🚀 Deployment
 Client: Netlify / Surge
 
 Server: Vercel
@@ -104,8 +85,8 @@ Client Repo: [GitHub link]
 
 Server Repo: [GitHub link]
 
-📂 Project Structure
-Code
+## 📂 Project Structure
+
 eco-track-client/
 ├── components/       # Navbar, Footer, Cards
 ├── layouts/          # PublicLayout, DashboardLayout
@@ -123,7 +104,9 @@ eco-track-server/
 ├── middlewares/      # Auth, error handling
 ├── utils/            # DB connection, Firebase Admin
 └── app.js, server.js
-🧠 Optional Enhancements
+
+## 🧠 Optional Enhancements
+
 🏆 Leaderboard for top contributors
 
 🏅 Badges for milestones
@@ -132,8 +115,8 @@ eco-track-server/
 
 🔐 Firebase Admin SDK for secure server-side auth
 
-🧭 Getting Started
-bash
+## 🧭 Getting Started
+
 # Client
 cd eco-track-client
 npm install
@@ -142,4 +125,4 @@ npm run dev
 # Server
 cd eco-track-server
 npm install
-npm run 
+npm run dev
