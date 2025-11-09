@@ -1,4 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap');
+
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: light --default, dark --prefersdark, cupcake;
+  themes: light --default, dark --prefersdark, synthwave;
+}
+
+@theme {
+  --font-Poppins: "Poppins", sans-serif;
+  --font-Playfair: "Playfair Display", serif;
+}
+
+body {
+  font-family: var(--font-Poppins);
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-Playfair);
 }
