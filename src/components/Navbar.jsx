@@ -12,6 +12,7 @@ const navLinks = [
 
 const Navbar = () => {
   const { user, logout, loading } = useContext(AuthContext)
+  
   const [showName, setShowName] = useState(false)
   const navigate = useNavigate()
 
@@ -75,10 +76,10 @@ const Navbar = () => {
 
           <Link
             to="/"
-            className="flex items-center gap-2 font-bold text-xl text-primary animate__animated animate__fadeInDown"
+            className="flex items-center font-bold text-xl text-primary animate__animated animate__fadeInDown"
           >
             <img src={logo} alt="EcoTrack Logo" className="w-10 h-10" />
-            <span className="font-Playfair text-2xl">EcoTrack</span>
+            <span className="font-Playfair text-3xl">EcoTrack</span>
           </Link>
         </div>
 
@@ -140,7 +141,7 @@ const Navbar = () => {
                 onMouseLeave={() => setShowName(false)}
               >
                 <img
-                  src={user.photoURL || "/default-avatar.png"}
+                  src={user.photoURL || user.providerData[0].photoURL || "/default-avatar.png"}
                   alt="avatar"
                   className="w-10 h-10 rounded-full border-2 border-primary cursor-pointer object-cover"
                 />

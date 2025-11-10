@@ -95,6 +95,8 @@ const useAuth = () => {
       transition: Bounce,
     })
   }
+  
+  
 
   return {
     user,
