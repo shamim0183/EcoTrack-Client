@@ -11,6 +11,7 @@ import {
 } from "firebase/auth"
 import { Bounce, toast } from "react-toastify"
 import { auth } from "../services/firebaseConfig"
+import axios from "../api/axios";
 
 import { useEffect, useState } from "react";
 
@@ -55,6 +56,14 @@ const useAuth = () => {
   const login = async (email, password) => {
     const result = await signInWithEmailAndPassword(auth, email, password)
     setUser(result.user)
+
+    // Sync with backend
+    await axios.post("/users/sync", {
+      email: result.user.email,
+      name: result.user.displayName,
+      photoURL: result.user.photoURL,
+      provider: result.user.providerData?.[0]?.providerId,
+    })
   }
 
   const register = async (email, password, name, photoURL) => {
@@ -65,6 +74,14 @@ const useAuth = () => {
     })
     await result.user.reload()
     setUser(auth.currentUser)
+
+    // Sync with backend
+    await axios.post("/users/sync", {
+      email,
+      name,
+      photoURL,
+      provider: "password",
+    })
   }
 
   const googleLogin = async () => {
