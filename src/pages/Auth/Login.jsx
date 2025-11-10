@@ -101,7 +101,7 @@ const Login = () => {
             </div>
             {isValidPassword === false && (
               <p className="text-red-500 text-sm">
-                Must be 8+ chars, include uppercase, lowercase, number, and
+                Must be 6 chars, include uppercase, lowercase, number, and
                 special character.
               </p>
             )}

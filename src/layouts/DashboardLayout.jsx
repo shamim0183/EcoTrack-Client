@@ -1,37 +1,68 @@
-
-import { Outlet } from "react-router"
+import { Outlet } from "react-router";
 import Navbar from "../components/Navbar";
+import MyLink from "../components/MyLink";
+import Footer from "../components/Footer";
+import Container from "../components/Container";
 
 export default function DashboardLayout() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <Navbar />
-      <div className="grow container mx-auto px-4 py-6">
+      <Container className="grow px-4 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          <aside className="hidden lg:block col-span-1 bg-white p-4 rounded shadow">
+          {/* Sidebar always visible */}
+          <aside className="col-span-1 bg-white p-4 rounded shadow">
             <ul className="space-y-2">
               <li>
-                <a href="/my-activities" className="link link-hover">
+                <MyLink
+                  to="/my-activities"
+                  className="block px-3 py-2 rounded text-primary hover:bg-primary hover:text-white"
+                >
                   My Activities
-                </a>
+                </MyLink>
               </li>
               <li>
-                <a href="/profile" className="link link-hover">
+                <MyLink
+                  to="/profile"
+                  className="block px-3 py-2 rounded text-primary hover:bg-primary hover:text-white"
+                >
                   Profile
-                </a>
+                </MyLink>
               </li>
               <li>
-                <a href="/challenges/add" className="link link-hover">
+                <MyLink
+                  to="/challenge/add"
+                  className="block px-3 py-2 rounded text-primary hover:bg-primary hover:text-white"
+                >
                   Add Challenge
-                </a>
+                </MyLink>
+              </li>
+              <li>
+                <MyLink
+                  to="/tip/add"
+                  className="block px-3 py-2 rounded text-primary hover:bg-primary hover:text-white"
+                >
+                  Add Tip
+                </MyLink>
+              </li>
+              <li>
+                <MyLink
+                  to="/event/add"
+                  className="block px-3 py-2 rounded text-primary hover:bg-primary hover:text-white"
+                >
+                  Add Event
+                </MyLink>
               </li>
             </ul>
           </aside>
+
+          {/* Main content */}
           <main className="col-span-1 lg:col-span-3">
             <Outlet />
           </main>
         </div>
-      </div>
+      </Container>
+      <Footer />
     </div>
-  )
+  );
 }

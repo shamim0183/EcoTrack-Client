@@ -4,22 +4,33 @@ import { AuthContext } from "../context/AuthContext"
 import MyLink from "./MyLink"
 import logo from "../assets/logo.png"
 
-const navLinks = [
-  { label: "Home", to: "/" },
-  { label: "Challenges", to: "/challenges" },
-  { label: "My Activities", to: "/my-activities" },
-]
-
 const Navbar = () => {
   const { user, logout, loading } = useContext(AuthContext)
-  
-  const [showName, setShowName] = useState(false)
+  const [showDropdown, setShowDropdown] = useState(false)
   const navigate = useNavigate()
 
   const handleLogout = async () => {
     await logout()
     navigate("/login", { replace: true })
   }
+
+  const publicLinks = [
+    { label: "Home", to: "/" },
+    { label: "Challenges", to: "/challenges" },
+    { label: "Tips", to: "/tips" },
+    { label: "Events", to: "/events" },
+  ]
+
+  const protectedLinks = [
+    { label: "Add Challenge", to: "/challenge/add" },
+    { label: "Add Tip", to: "/tip/add" },
+    { label: "Add Event", to: "/event/add" },
+  ]
+
+  const dropdownLinks = [
+    { label: "Profile", to: "/profile" },
+    { label: "My Activities", to: "/my-activities" },
+  ]
 
   return (
     <header className="sticky top-0 z-50 bg-base-100 shadow-md">
@@ -45,9 +56,9 @@ const Navbar = () => {
             </div>
             <ul
               tabIndex={-1}
-              className="menu menu-sm dropdown-content mt-3 z-1 p-2 shadow bg-base-100 rounded-box w-52"
+              className="menu menu-sm dropdown-content mt-3 z-10 p-2 shadow bg-base-100 rounded-box w-52"
             >
-              {navLinks.map(({ label, to }) => (
+              {publicLinks.map(({ label, to }) => (
                 <li key={label}>
                   <MyLink to={to}>{label}</MyLink>
                 </li>
@@ -63,9 +74,16 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <li>
-                    <MyLink to="/profile">Profile</MyLink>
-                  </li>
+                  {protectedLinks.map(({ label, to }) => (
+                    <li key={label}>
+                      <MyLink to={to}>{label}</MyLink>
+                    </li>
+                  ))}
+                  {dropdownLinks.map(({ label, to }) => (
+                    <li key={label}>
+                      <MyLink to={to}>{label}</MyLink>
+                    </li>
+                  ))}
                   <li>
                     <button onClick={handleLogout}>Logout</button>
                   </li>
@@ -76,7 +94,7 @@ const Navbar = () => {
 
           <Link
             to="/"
-            className="flex items-center font-bold text-xl text-primary animate__animated animate__fadeInDown"
+            className="flex items-center font-bold text-xl text-primary"
           >
             <img src={logo} alt="EcoTrack Logo" className="w-10 h-10" />
             <span className="font-Playfair text-3xl">EcoTrack</span>
@@ -86,11 +104,17 @@ const Navbar = () => {
         {/* Center: Desktop Nav */}
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1 flex gap-4 items-center">
-            {navLinks.map(({ label, to }) => (
+            {publicLinks.map(({ label, to }) => (
               <li key={label}>
                 <MyLink to={to}>{label}</MyLink>
               </li>
             ))}
+            {user &&
+              protectedLinks.map(({ label, to }) => (
+                <li key={label}>
+                  <MyLink to={to}>{label}</MyLink>
+                </li>
+              ))}
           </ul>
         </div>
 
@@ -98,66 +122,56 @@ const Navbar = () => {
         <div className="navbar-end gap-4">
           {/* Theme Toggle */}
           <label className="flex cursor-pointer gap-2 items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="25"
-              height="25"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="12" cy="12" r="5" />
-              <path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" />
-            </svg>
             <input
               type="checkbox"
               value="synthwave"
               className="toggle theme-controller"
             />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="25"
-              height="25"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-            </svg>
           </label>
 
-          {/* Auth Buttons or Avatar */}
+          {/* Auth Buttons or Avatar Dropdown */}
           {loading ? (
             <span className="loading loading-spinner text-primary"></span>
           ) : user ? (
-            <>
-              <div
-                className="relative"
-                onMouseEnter={() => setShowName(true)}
-                onMouseLeave={() => setShowName(false)}
+            <div className="relative">
+              <button
+                onClick={() => setShowDropdown((prev) => !prev)}
+                className="flex items-center gap-2"
               >
                 <img
-                  src={user.photoURL || user.providerData[0].photoURL || "/default-avatar.png"}
+                  src={
+                    user.photoURL ||
+                    user.providerData[0]?.photoURL ||
+                    "/default-avatar.png"
+                  }
                   alt="avatar"
-                  className="w-10 h-10 rounded-full border-2 border-primary cursor-pointer object-cover"
+                  className="cursor-pointer w-10 h-10 rounded-full border-2 border-primary object-cover"
                 />
-                {showName && (
-                  <div className="absolute top-12 left-1/2 -translate-x-1/2 bg-base-200 text-sm px-3 py-1 rounded shadow whitespace-nowrap">
-                    {user.displayName}
-                  </div>
-                )}
-              </div>
-              <button
-                onClick={handleLogout}
-                className="btn btn-outline btn-primary animate__animated animate__bounceIn"
-              >
-                Logout
               </button>
-            </>
+
+              {showDropdown && (
+                <ul className="absolute right-0 mt-2 w-48 bg-base-100 shadow-lg rounded-box z-50 p-2 space-y-2">
+                  {dropdownLinks.map(({ label, to }) => (
+                    <li key={label}>
+                      <MyLink
+                        to={to}
+                        className="block px-4 py-2 hover:bg-primary rounded"
+                      >
+                        {label}
+                      </MyLink>
+                    </li>
+                  ))}
+                  <li>
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full font-semibold text-primary text-left px-4 py-2 hover:bg-primary cursor-pointer hover:text-white rounded"
+                    >
+                      Logout
+                    </button>
+                  </li>
+                </ul>
+              )}
+            </div>
           ) : (
             <div className="hidden lg:flex gap-2">
               <MyLink to="/login" className="btn btn-sm btn-outline">
