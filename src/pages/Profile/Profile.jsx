@@ -1,11 +1,10 @@
-import React from 'react';
+import React from "react"
 
-const Profile = () => {
+export default function Profile() {
   return (
-    <div>
-      <h1>Profile</h1>
+    <div className="max-w-7xl mx-auto px-4 py-10">
+      <h2 className="text-3xl font-bold mb-6">My EcoTrack Profile</h2>
+      {/* Sections: My Challenges, My Tips, My Events + Edit/Delete */}
     </div>
-  );
-};
-
-export default Profile;
+  )
+}
