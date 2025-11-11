@@ -1,29 +1,51 @@
-import { use, useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import axios from "../api/axios"
 import { toast } from "react-toastify"
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../context/AuthContext"
+import SkeletonCard from "../components/SkeletonCard"
 
 export default function Dashboard() {
-  const { user } = use(AuthContext)
+  const { user } = useContext(AuthContext)
+  const [loading, setLoading] = useState(false)
   const [data, setData] = useState({ challenges: [], tips: [], events: [] })
 
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
+        setLoading(true)
         const res = await axios.get("/dashboard", {
-          params: { userEmail: user?.email },
+          params: { userEmail: user.email },
         })
         setData(res.data)
       } catch (err) {
         toast.error("Failed to load dashboard")
         console.error(err)
+      } finally {
+        setLoading(false)
       }
     }
 
-    if (user?.email) {
-      fetchDashboard()
-    }
+    fetchDashboard()
   }, [user])
+
+  const handleUpdate = async (entryId, updates) => {
+    try {
+      await axios.patch(`/user-challenges/update/${entryId}`, updates)
+
+      setData((prev) => ({
+        ...prev,
+        challenges: prev.challenges.map((c) =>
+          c.userChallengeId === entryId
+            ? { ...c, ...updates, updatedAt: new Date().toISOString() }
+            : c
+        ),
+      }))
+      toast.success("Progress updated")
+    } catch (err) {
+      toast.error("Failed to update progress")
+      console.error(err)
+    }
+  }
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
@@ -32,28 +54,76 @@ export default function Dashboard() {
       {/* Challenges */}
       <section className="mb-10">
         <h3 className="text-xl font-semibold mb-4">Joined Challenges</h3>
-        {data.challenges.length === 0 ? (
+        {loading ? (
+          <div className="grid gap-6">
+            {[...Array(3)].map((_, i) => (
+              <SkeletonCard key={i} />
+            ))}
+          </div>
+        ) : data.challenges.length === 0 ? (
           <p>No challenges joined yet.</p>
         ) : (
           <div className="grid gap-6">
             {data.challenges.map((entry) => (
-              <div key={entry._id} className="card bg-base-100 shadow-md p-6">
+              <div
+                key={entry.userChallengeId}
+                className="card bg-base-100 shadow-md p-6"
+              >
                 <h4 className="text-lg font-bold">{entry.challenge.title}</h4>
                 <p className="text-sm text-gray-500">
                   {entry.challenge.category}
                 </p>
                 <p>{entry.challenge.description}</p>
-                <p>
-                  Status: <strong>{entry.status}</strong>
-                </p>
+
+                <div className="mt-4 space-y-2">
+                  <label className="block text-sm font-medium">Status</label>
+                  <select
+                    className="select select-bordered w-full"
+                    value={entry.status}
+                    onChange={(e) =>
+                      handleUpdate(entry.userChallengeId, {
+                        status: e.target.value,
+                      })
+                    }
+                  >
+                    <option>Not Started</option>
+                    <option>Ongoing</option>
+                    <option>Finished</option>
+                  </select>
+
+                  <label className="block text-sm font-medium mt-2">
+                    Progress: {entry.progress}%
+                  </label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={entry.progress}
+                    onChange={(e) =>
+                      handleUpdate(entry.userChallengeId, {
+                        progress: parseInt(e.target.value),
+                      })
+                    }
+                    className="range range-success"
+                  />
+                </div>
+
                 <progress
-                  className="progress progress-success w-full"
+                  className="progress progress-success w-full mt-2"
                   value={entry.progress}
                   max="100"
                 ></progress>
-                <p className="text-xs text-gray-400">
-                  Joined: {new Date(entry.joinDate).toLocaleDateString()}
-                </p>
+
+                <div className="flex justify-between text-xs text-gray-400 mt-2">
+                  <span>
+                    Joined: {new Date(entry.joinDate).toLocaleDateString()}
+                  </span>
+                  {entry.updatedAt && (
+                    <span>
+                      Updated: {new Date(entry.updatedAt).toLocaleDateString()}
+                    </span>
+                  )}
+                </div>
               </div>
             ))}
           </div>
@@ -63,7 +133,13 @@ export default function Dashboard() {
       {/* Tips */}
       <section className="mb-10">
         <h3 className="text-xl font-semibold mb-4">Liked Tips</h3>
-        {data.tips.length === 0 ? (
+        {loading ? (
+          <div className="grid gap-6">
+            {[...Array(2)].map((_, i) => (
+              <SkeletonCard key={i} />
+            ))}
+          </div>
+        ) : data.tips.length === 0 ? (
           <p>No tips liked yet.</p>
         ) : (
           <ul className="list-disc pl-5">
@@ -76,8 +152,14 @@ export default function Dashboard() {
 
       {/* Events */}
       <section>
-        <h3 className="text-xl font-semibold mb-4">RSVP’d Events</h3>
-        {data.events.length === 0 ? (
+        <h3 className="text-xl font-semibold mb-4">Events</h3>
+        {loading ? (
+          <div className="grid gap-6">
+            {[...Array(2)].map((_, i) => (
+              <SkeletonCard key={i} />
+            ))}
+          </div>
+        ) : data.events.length === 0 ? (
           <p>No events RSVP’d yet.</p>
         ) : (
           <ul className="list-disc pl-5">
