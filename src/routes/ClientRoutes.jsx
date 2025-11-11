@@ -5,7 +5,6 @@ import PrivateRoute from "./PrivateRoute"
 
 import AddChallenge from "../Challenges/AddChallenge"
 import ChallengeDetail from "../Challenges/ChallengeDetail"
-import ChallengesList from "../Challenges/ChallengesList"
 import Home from "../pages/Home/Home"
 
 import ActivityDetail from "../pages/MyActivities/ActivityDetail"
@@ -24,6 +23,7 @@ import Profile from "../pages/Profile/Profile"
 import AddTips from "../tips/AddTips"
 import Tips from "../tips/Tips"
 import Dashboard from "../pages/Dashboard";
+import ChallengesList from "../Challenges/ChallengesList";
 
 export const router = createBrowserRouter([
   {
