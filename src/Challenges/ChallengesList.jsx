@@ -42,7 +42,7 @@ export default function ChallengesList() {
 
   useEffect(() => {
     fetchFilteredChallenges()
-  }, [selectedCategories, startDate, endDate, minParticipants, maxParticipants])
+  }, [selectedCategories -, startDate, endDate, minParticipants, maxParticipants])
 
   const handleCategoryToggle = (category) => {
     setSelectedCategories((prev) =>

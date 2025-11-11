@@ -10,12 +10,12 @@ export default function Dashboard() {
   const [data, setData] = useState({ challenges: [], tips: [], events: [] })
 
   useEffect(() => {
+    if (!user) return
+
     const fetchDashboard = async () => {
       try {
         setLoading(true)
-        const res = await axios.get("/dashboard", {
-          params: { userEmail: user.email },
-        })
+        const res = await axios.get("/dashboard") // ✅ token auto-attached
         setData(res.data)
       } catch (err) {
         toast.error("Failed to load dashboard")

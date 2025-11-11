@@ -11,9 +11,8 @@ import {
 } from "firebase/auth"
 import { Bounce, toast } from "react-toastify"
 import { auth } from "../services/firebaseConfig"
-import axios from "../api/axios";
-
-import { useEffect, useState } from "react";
+import axios from "../api/axios"
+import { useEffect, useState } from "react"
 
 const googleProvider = new GoogleAuthProvider()
 const githubProvider = new GithubAuthProvider()
@@ -23,12 +22,35 @@ const useAuth = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
+  // ✅ Attach token to all Axios requests
+  const getToken = async () => {
+    if (!auth.currentUser) return null
+    return await auth.currentUser.getIdToken()
+  }
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser)
       setLoading(false)
     })
-    return () => unsubscribe()
+
+    // ✅ Axios interceptor
+    const attachToken = async (config) => {
+      const token = await getToken()
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`
+      }
+      return config
+    }
+
+    const interceptor = axios.interceptors.request.use(attachToken, (error) =>
+      Promise.reject(error)
+    )
+
+    return () => {
+      unsubscribe()
+      axios.interceptors.request.eject(interceptor)
+    }
   }, [])
 
   const handleSubmit = async (e, callback, successMessage) => {
@@ -57,7 +79,6 @@ const useAuth = () => {
     const result = await signInWithEmailAndPassword(auth, email, password)
     setUser(result.user)
 
-    // Sync with backend
     await axios.post("/users/sync", {
       email: result.user.email,
       name: result.user.displayName,
@@ -75,7 +96,6 @@ const useAuth = () => {
     await result.user.reload()
     setUser(auth.currentUser)
 
-    // Sync with backend
     await axios.post("/users/sync", {
       email,
       name,
@@ -112,8 +132,6 @@ const useAuth = () => {
       transition: Bounce,
     })
   }
-  
-  
 
   return {
     user,
