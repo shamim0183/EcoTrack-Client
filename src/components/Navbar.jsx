@@ -25,6 +25,7 @@ const Navbar = () => {
     { label: "Add Challenge", to: "/challenge/add" },
     { label: "Add Tip", to: "/tip/add" },
     { label: "Add Event", to: "/event/add" },
+    { label: "Dashboard", to: "/dashboard" },
   ]
 
   const dropdownLinks = [

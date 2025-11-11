@@ -1,8 +1,8 @@
-import { use,  useState } from "react"
-import axios from "axios"
+import { use, useState } from "react"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { AuthContext } from "../../context/AuthContext";
+import axios from "../api/axios"
+import { AuthContext } from "../context/AuthContext"
 
 export default function AddChallenge() {
   const { user } = use(AuthContext)
@@ -42,7 +42,7 @@ export default function AddChallenge() {
 
     try {
       setLoading(true)
-      await axios.post("http://localhost:5000/api/challenges", payload)
+      await axios.post("/challenges", payload)
       toast.success("Challenge created successfully!")
       setFormData({
         title: "",

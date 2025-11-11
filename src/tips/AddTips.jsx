@@ -1,5 +1,5 @@
 import { useState,  use } from "react"
-import axios from "axios"
+import axios from "../api/axios"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { AuthContext } from "../context/AuthContext";
@@ -38,7 +38,7 @@ export default function AddTips() {
 
     try {
       setLoading(true)
-      await axios.post("http://localhost:5000/api/tips", payload)
+      await axios.post("/tips", payload)
       toast.success("Tip shared successfully!")
       setFormData({ title: "", content: "", category: "" })
     } catch (err) {
