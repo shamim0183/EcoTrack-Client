@@ -8,8 +8,6 @@ import ChallengesList from "../pages/Challenges/ChallengesList"
 import ChallengeDetail from "../pages/Challenges/ChallengeDetail"
 import AddChallenge from "../pages/Challenges/AddChallenge"
 
-
-
 import MyActivities from "../pages/MyActivities/MyActivities"
 import ActivityDetail from "../pages/MyActivities/ActivityDetail"
 
@@ -21,10 +19,10 @@ import Profile from "../pages/Profile/Profile"
 import About from "../pages/About"
 import Contact from "../pages/Contact"
 import NotFound from "../pages/Error/NotFound"
-import Tips from "../tips/Tips";
-import Events from "../events/Events";
-import AddTips from "../tips/AddTips";
-import AddEvents from "../events/AddEvents";
+import Tips from "../tips/Tips"
+import Events from "../events/Events"
+import AddTips from "../tips/AddTips"
+import AddEvents from "../events/AddEvents"
 
 export const router = createBrowserRouter([
   {
@@ -55,7 +53,14 @@ export const router = createBrowserRouter([
       { path: "challenges/join/:id", element: <ChallengeDetail /> },
       { path: "tip/add", element: <AddTips /> },
       { path: "event/add", element: <AddEvents /> },
-      { path: "my-activities", element: <MyActivities /> },
+      {
+        path: "my-activities",
+        element: (
+          <PrivateRoute>
+            <MyActivities />
+          </PrivateRoute>
+        ),
+      },
       { path: "my-activities/:id", element: <ActivityDetail /> },
       { path: "profile", element: <Profile /> },
     ],

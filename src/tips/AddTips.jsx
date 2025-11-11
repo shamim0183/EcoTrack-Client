@@ -1,15 +1,18 @@
-import { use, useState } from "react"
+import { useState,  use } from "react"
 import axios from "axios"
 import { toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 import { AuthContext } from "../context/AuthContext";
 
-const AddTips = () => {
+export default function AddTips() {
   const { user } = use(AuthContext)
+
   const [formData, setFormData] = useState({
     title: "",
     content: "",
     category: "",
   })
+
   const [loading, setLoading] = useState(false)
 
   const handleChange = (e) => {
@@ -19,7 +22,11 @@ const AddTips = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!user?.email) return toast.error("Login required")
+
+    if (!user?.email) {
+      toast.error("You must be logged in to share a tip.")
+      return
+    }
 
     const payload = {
       ...formData,
@@ -32,10 +39,11 @@ const AddTips = () => {
     try {
       setLoading(true)
       await axios.post("http://localhost:5000/api/tips", payload)
-      toast.success("Tip added successfully!")
+      toast.success("Tip shared successfully!")
       setFormData({ title: "", content: "", category: "" })
     } catch (err) {
-      toast.error(err.message || "Failed to add tip")
+      toast.error("Failed to share tip")
+      console.error(err)
     } finally {
       setLoading(false)
     }
@@ -43,42 +51,55 @@ const AddTips = () => {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
-      <h2 className="text-3xl font-bold mb-6">Add a Sustainability Tip</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <h2 className="text-3xl font-bold mb-6">Share Eco Tip</h2>
+      <form onSubmit={handleSubmit} className="space-y-6">
         <input
           name="title"
           value={formData.title}
           onChange={handleChange}
-          placeholder="Title"
+          placeholder="Tip Title"
           className="input input-bordered w-full"
           required
         />
+
         <textarea
           name="content"
           value={formData.content}
           onChange={handleChange}
-          placeholder="Content"
+          placeholder="Tip Content"
           className="textarea textarea-bordered w-full"
           required
         />
-        <input
+
+        <select
           name="category"
           value={formData.category}
           onChange={handleChange}
-          placeholder="Category"
-          className="input input-bordered w-full"
+          className="select select-bordered w-full"
           required
-        />
+        >
+          <option value="">Select Category</option>
+          <option>Waste Management</option>
+          <option>Energy Conservation</option>
+          <option>Water Conservation</option>
+          <option>Green Living</option>
+        </select>
+
         <button
           type="submit"
           className={`btn btn-primary w-full ${loading ? "btn-disabled" : ""}`}
           disabled={loading}
         >
-          {loading ? "Submitting…" : "Submit Tip"}
+          {loading ? (
+            <span className="flex items-center justify-center gap-2">
+              <span className="loading loading-spinner loading-sm"></span>
+              Sharing…
+            </span>
+          ) : (
+            "Share Tip"
+          )}
         </button>
       </form>
     </div>
   )
 }
-
-export default AddTips

@@ -1,17 +1,20 @@
-import { use, useState } from "react"
+import { useState,  use } from "react"
 import axios from "axios"
 import { toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 import { AuthContext } from "../context/AuthContext";
 
-const AddEvents = () => {
+export default function AddEvents() {
   const { user } = use(AuthContext)
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     date: "",
     location: "",
-    maxParticipants: "",
+    maxParticipants: 50,
   })
+
   const [loading, setLoading] = useState(false)
 
   const handleChange = (e) => {
@@ -21,7 +24,11 @@ const AddEvents = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!user?.email) return toast.error("Login required")
+
+    if (!user?.email) {
+      toast.error("You must be logged in to create an event.")
+      return
+    }
 
     const payload = {
       ...formData,
@@ -38,10 +45,11 @@ const AddEvents = () => {
         description: "",
         date: "",
         location: "",
-        maxParticipants: "",
+        maxParticipants: 50,
       })
     } catch (err) {
-      toast.error(err.message || "Failed to create event")
+      toast.error("Failed to create event")
+      console.error(err)
     } finally {
       setLoading(false)
     }
@@ -49,24 +57,26 @@ const AddEvents = () => {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
-      <h2 className="text-3xl font-bold mb-6">Create a Community Event</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <h2 className="text-3xl font-bold mb-6">Create New Event</h2>
+      <form onSubmit={handleSubmit} className="space-y-6">
         <input
           name="title"
           value={formData.title}
           onChange={handleChange}
-          placeholder="Title"
+          placeholder="Event Title"
           className="input input-bordered w-full"
           required
         />
+
         <textarea
           name="description"
           value={formData.description}
           onChange={handleChange}
-          placeholder="Description"
+          placeholder="Event Description"
           className="textarea textarea-bordered w-full"
           required
         />
+
         <input
           name="date"
           type="datetime-local"
@@ -75,6 +85,7 @@ const AddEvents = () => {
           className="input input-bordered w-full"
           required
         />
+
         <input
           name="location"
           value={formData.location}
@@ -83,25 +94,31 @@ const AddEvents = () => {
           className="input input-bordered w-full"
           required
         />
+
         <input
           name="maxParticipants"
           type="number"
           value={formData.maxParticipants}
           onChange={handleChange}
-          placeholder="Max Participants"
           className="input input-bordered w-full"
           required
         />
+
         <button
           type="submit"
           className={`btn btn-primary w-full ${loading ? "btn-disabled" : ""}`}
           disabled={loading}
         >
-          {loading ? "Submitting…" : "Create Event"}
+          {loading ? (
+            <span className="flex items-center justify-center gap-2">
+              <span className="loading loading-spinner loading-sm"></span>
+              Creating…
+            </span>
+          ) : (
+            "Create Event"
+          )}
         </button>
       </form>
     </div>
   )
 }
-
-export default AddEvents

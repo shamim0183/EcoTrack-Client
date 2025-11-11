@@ -1,11 +1,11 @@
-import { use, useState } from "react"
+import { use,  useState } from "react"
 import axios from "axios"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { AuthContext } from "../../context/AuthContext";
 
 export default function AddChallenge() {
-  const { user } = use(AuthContext) // ✅ Access user from AuthContext
+  const { user } = use(AuthContext)
 
   const [formData, setFormData] = useState({
     title: "",
@@ -19,7 +19,7 @@ export default function AddChallenge() {
     imageUrl: "",
   })
 
-  const [loading, setLoading] = useState(false) // ✅ Loading state
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (e) => {
     const { name, value } = e.target
