@@ -1,16 +1,13 @@
-import { use, useEffect, useState } from "react"
+import { useEffect, useState} from "react"
 import axios from "../api/axios"
 import ChallengeCard from "../components/ChallengeCard"
 import SkeletonCard from "../components/SkeletonCard"
 import { toast } from "react-toastify"
-import { AuthContext } from "../context/AuthContext";
 
 export default function ChallengesList() {
-  const { user } =  use(AuthContext)
   const [challenges, setChallenges] = useState([])
   const [loading, setLoading] = useState(true)
 
-  // Filters
   const [selectedCategories, setSelectedCategories] = useState([])
   const [startDate, setStartDate] = useState("")
   const [endDate, setEndDate] = useState("")
@@ -42,7 +39,13 @@ export default function ChallengesList() {
 
   useEffect(() => {
     fetchFilteredChallenges()
-  }, [selectedCategories, startDate, endDate, minParticipants, maxParticipants])
+  }, [
+    selectedCategories,
+    startDate,
+    endDate,
+    minParticipants,
+    maxParticipants,
+  ])
 
   const handleCategoryToggle = (category) => {
     setSelectedCategories((prev) =>
@@ -55,9 +58,10 @@ export default function ChallengesList() {
   const handleJoin = async (challengeId) => {
     try {
       await axios.post("/user-challenges/join", {
-        userId: user.email,
         challengeId,
+        
       })
+      console.log(challengeId)
       toast.success("Challenge joined!")
     } catch (err) {
       if (err.response?.status === 409) {
@@ -67,6 +71,10 @@ export default function ChallengesList() {
         console.error(err)
       }
     }
+  }
+
+  const handleDelete = (deletedId) => {
+    setChallenges((prev) => prev.filter((c) => c._id !== deletedId))
   }
 
   return (
@@ -158,6 +166,7 @@ export default function ChallengesList() {
               key={challenge._id}
               challenge={challenge}
               onJoin={handleJoin}
+              onDelete={handleDelete}
             />
           ))
         )}

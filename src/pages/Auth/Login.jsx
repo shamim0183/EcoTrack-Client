@@ -3,7 +3,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa"
 import { Link, useLocation, useNavigate } from "react-router"
 import { Bounce, toast } from "react-toastify"
 import { FcGoogle } from "react-icons/fc"
-import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext"
 
 const Login = () => {
   const { login, loading, error, handleSubmit, googleLogin } =
@@ -45,7 +45,7 @@ const Login = () => {
 
   const handleForgotPassword = () => {
     const email = emailRef.current?.value || ""
-    navigate("/auth/forgot-password", { state: { email } })
+    navigate("/forgot-password", { state: { email } })
   }
 
   const handlePasswordChange = (e) => {
@@ -58,7 +58,7 @@ const Login = () => {
     <div className="flex justify-center items-center min-h-screen px-4 bg-base-100">
       <div className="card w-full max-w-sm bg-base-200 shadow-xl py-8 px-6">
         <h1 className="text-3xl font-bold text-center gradient-text mb-6">
-          Login Into EcoTrack 🌿
+          Login to EcoTrack 🌿
         </h1>
 
         <form
@@ -101,7 +101,7 @@ const Login = () => {
             </div>
             {isValidPassword === false && (
               <p className="text-red-500 text-sm">
-                Must be 6 chars, include uppercase, lowercase, number, and
+                Must be 8+ chars, include uppercase, lowercase, number, and
                 special character.
               </p>
             )}

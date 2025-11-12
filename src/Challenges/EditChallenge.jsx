@@ -1,11 +1,13 @@
-import { use, useState } from "react"
-import { toast } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
+import { useContext, useEffect, useState } from "react"
+import { useParams, useNavigate } from "react-router"
 import axios from "../api/axios"
+import { toast } from "react-toastify"
 import { AuthContext } from "../context/AuthContext"
 
-export default function AddChallenge() {
-  const { user } = use(AuthContext)
+export default function EditChallenge() {
+  const { user } = useContext(AuthContext)
+  const { id } = useParams()
+  const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
     title: "",
@@ -21,6 +23,40 @@ export default function AddChallenge() {
 
   const [loading, setLoading] = useState(false)
 
+  useEffect(() => {
+    const fetchChallenge = async () => {
+      try {
+        const res = await axios.get(`/challenges/${id}`)
+        const challenge = res.data
+
+        if (
+          challenge.createdBy !== user?.email 
+        ) {
+          toast.error("Access denied: You can't edit this challenge.")
+          navigate("/challenges")
+          return
+        }
+
+        setFormData({
+          title: challenge.title || "",
+          category: challenge.category || "",
+          description: challenge.description || "",
+          duration: challenge.duration || "",
+          target: challenge.target || "",
+          impactMetric: challenge.impactMetric || "",
+          startDate: challenge.startDate?.slice(0, 10) || "",
+          endDate: challenge.endDate?.slice(0, 10) || "",
+          imageUrl: challenge.imageUrl || "",
+        })
+      } catch (err) {
+        toast.error("Failed to load challenge")
+        console.error(err)
+      }
+    }
+
+    if (id && user?.email) fetchChallenge()
+  }, [id, user, navigate])
+
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
@@ -29,41 +65,18 @@ export default function AddChallenge() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!user?.email) {
-      toast.error("You must be logged in to create a challenge.")
+    if (!formData.title.trim()) {
+      toast.error("Title is required")
       return
     }
 
-    const payload = {
-      ...formData,
-      createdBy: user.email,
-      participants: 0,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    }
-if (!formData.title.trim()) {
-  toast.error("Title is required")
-  return
-}
-
-
     try {
       setLoading(true)
-      await axios.post("/challenges", payload)
-      toast.success("Challenge created successfully!")
-      setFormData({
-        title: "",
-        category: "",
-        description: "",
-        duration: "",
-        target: "",
-        impactMetric: "",
-        startDate: "",
-        endDate: "",
-        imageUrl: "",
-      })
+      await axios.patch(`/challenges/${id}`, formData)
+      toast.success("Challenge updated successfully!")
+      navigate("/challenges")
     } catch (err) {
-      toast.error("Failed to create challenge")
+      toast.error("Failed to update challenge")
       console.error(err)
     } finally {
       setLoading(false)
@@ -71,8 +84,8 @@ if (!formData.title.trim()) {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-10">
-      <h2 className="text-3xl font-bold mb-6">Add New Challenge</h2>
+    <div className="p-6 bg-white rounded shadow">
+      <h2 className="text-3xl font-bold mb-6">Edit Challenge</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         <input
           name="title"
@@ -170,10 +183,10 @@ if (!formData.title.trim()) {
           {loading ? (
             <span className="flex items-center justify-center gap-2">
               <span className="loading loading-spinner loading-sm"></span>
-              Creating…
+              Updating…
             </span>
           ) : (
-            "Create Challenge"
+            "Update Challenge"
           )}
         </button>
       </form>

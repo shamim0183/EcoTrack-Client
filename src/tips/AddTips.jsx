@@ -34,7 +34,13 @@ export default function AddTips() {
       authorName: user.displayName,
       upvotes: 0,
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     }
+if (!formData.title.trim()) {
+  toast.error("Title is required")
+  return
+}
+
 
     try {
       setLoading(true)
@@ -50,7 +56,7 @@ export default function AddTips() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-10">
+    <div className="p-6 bg-white rounded shadow ">
       <h2 className="text-3xl font-bold mb-6">Share Eco Tip</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         <input

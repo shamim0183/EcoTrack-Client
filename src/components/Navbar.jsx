@@ -22,14 +22,10 @@ const Navbar = () => {
   ]
 
   const protectedLinks = [
-    { label: "Add Challenge", to: "/challenge/add" },
-    { label: "Add Tip", to: "/tip/add" },
-    { label: "Add Event", to: "/event/add" },
-    { label: "Dashboard", to: "/dashboard" },
+    { label: "Add Challenge", to: "/challenge/add" }
   ]
 
   const dropdownLinks = [
-    { label: "Profile", to: "/profile" },
     { label: "My Activities", to: "/my-activities" },
   ]
 
@@ -75,11 +71,7 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  {protectedLinks.map(({ label, to }) => (
-                    <li key={label}>
-                      <MyLink to={to}>{label}</MyLink>
-                    </li>
-                  ))}
+                  
                   {dropdownLinks.map(({ label, to }) => (
                     <li key={label}>
                       <MyLink to={to}>{label}</MyLink>

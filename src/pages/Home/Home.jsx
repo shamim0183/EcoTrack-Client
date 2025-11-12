@@ -22,21 +22,19 @@ export default function Home() {
       try {
         const [featuredRes, statsRes, activeRes, tipsRes, eventsRes] =
           await Promise.all([
-            axios.get("/challenges/featured"),
+            axios.get("/challenges"),
             axios.get("/stats"),
-            axios.get("/challenges/active"),
+            axios.get("/challenges"),
             axios.get("/tips/recent"),
-            axios.get("/events/upcoming"),
+            axios.get("/events"),
           ])
         setFeaturedChallenges(featuredRes.data)
-        console.log(featuredRes.data)
         
         setStats(statsRes.data)
         setActiveChallenges(activeRes.data)
         setRecentTips(tipsRes.data)
         
         setUpcomingEvents(eventsRes.data)
-        console.log(eventsRes.data);
       } catch (err) {
         console.error("Home page fetch error:", err)
       }

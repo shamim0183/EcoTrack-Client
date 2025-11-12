@@ -19,11 +19,11 @@ import Events from "../events/Events"
 import About from "../pages/About"
 import Contact from "../pages/Contact"
 import NotFound from "../pages/Error/NotFound"
-import Profile from "../pages/Profile/Profile"
 import AddTips from "../tips/AddTips"
 import Tips from "../tips/Tips"
-import Dashboard from "../pages/Dashboard";
-import ChallengesList from "../Challenges/ChallengesList";
+import Dashboard from "../pages/Dashboard"
+import ChallengesList from "../Challenges/ChallengesList"
+import EditChallenge from "../Challenges/EditChallenge";
 
 export const router = createBrowserRouter([
   {
@@ -51,7 +51,14 @@ export const router = createBrowserRouter([
     ),
     children: [
       { path: "challenge/add", element: <AddChallenge /> },
-      { path: "challenges/join/:id", element: <ChallengeDetail /> },
+      {
+        path: "challenges/join/:id",
+        element: (
+          <PrivateRoute>
+            <ChallengeDetail />
+          </PrivateRoute>
+        ),
+      },
       { path: "tip/add", element: <AddTips /> },
       { path: "event/add", element: <AddEvents /> },
       {
@@ -62,8 +69,22 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
-      { path: "my-activities/:id", element: <ActivityDetail /> },
-      { path: "profile", element: <Profile /> },
+      {
+        path: "my-activities/:id",
+        element: (
+          <PrivateRoute>
+            <ActivityDetail />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "edit-challenge/:id",
+        element: (
+          <PrivateRoute>
+            <EditChallenge />
+          </PrivateRoute>
+        ),
+      },
       { path: "dashboard", element: <Dashboard /> },
     ],
   },

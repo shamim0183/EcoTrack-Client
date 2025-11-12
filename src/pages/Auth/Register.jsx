@@ -52,7 +52,7 @@ const Register = () => {
     <div className="flex justify-center items-center min-h-screen px-4 bg-base-100">
       <div className="card w-full max-w-sm bg-base-200 shadow-xl py-8 px-6">
         <h1 className="text-3xl font-bold text-center gradient-text mb-6">
-          Register for EcoTrack 🌿
+          Join EcoTrack 🌿
         </h1>
         <form
           onSubmit={(e) =>

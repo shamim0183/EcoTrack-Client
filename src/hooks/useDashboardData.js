@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react"
 import axios from "../api/axios"
 
-const useDashboardData = (userEmail) => {
+const useDashboardData = () => {
   const [data, setData] = useState({ challenges: [], tips: [], events: [] })
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`/dashboard?userEmail=${userEmail}`)
+        const res = await axios.get("/dashboard") // ✅ no query param
         setData(res.data)
       } catch (err) {
         console.error("Dashboard fetch error:", err)
@@ -17,8 +17,8 @@ const useDashboardData = (userEmail) => {
       }
     }
 
-    if (userEmail) fetchData()
-  }, [userEmail])
+    fetchData()
+  }, [])
 
   return { data, loading }
 }

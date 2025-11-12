@@ -34,7 +34,14 @@ export default function AddEvents() {
       ...formData,
       organizer: user.email,
       currentParticipants: 0,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     }
+if (!formData.title.trim()) {
+  toast.error("Title is required")
+  return
+}
+
 
     try {
       setLoading(true)
@@ -56,7 +63,7 @@ export default function AddEvents() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-10">
+    <div className="p-6 bg-white rounded shadow">
       <h2 className="text-3xl font-bold mb-6">Create New Event</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         <input
@@ -106,7 +113,7 @@ export default function AddEvents() {
 
         <button
           type="submit"
-          className={`btn btn-primary w-full ${loading ? "btn-disabled" : ""}`}
+          className={`btn btn-primary w-full ${loading ? "btnocatioled" : ""}`}
           disabled={loading}
         >
           {loading ? (
