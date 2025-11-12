@@ -61,7 +61,6 @@ export default function ChallengesList() {
         challengeId,
         
       })
-      console.log(challengeId)
       toast.success("Challenge joined!")
     } catch (err) {
       if (err.response?.status === 409) {

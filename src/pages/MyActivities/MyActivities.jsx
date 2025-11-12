@@ -1,23 +1,33 @@
 import useDashboardData from "../../hooks/useDashboardData"
-import ChallengeCard from "../../components/ChallengeCard"
-import TipCard from "../../components/TipCard"
-import EventCard from "../../components/EventCard"
 import { AuthContext } from "../../context/AuthContext"
-import { use } from "react"
+import { useContext } from "react"
 import { Link } from "react-router"
-import LoadingSpinner from "../../components/LoadingSpinner";
+import LoadingSpinner from "../../components/LoadingSpinner"
+import axios from "../../api/axios"
+import { toast } from "react-toastify"
+import JoinedChallengeCard from "../../Challenges/JoinedChallengeCard";
 
 const MyActivities = () => {
-  const { user } = use(AuthContext)
-  const { data, loading } = useDashboardData()
+  const { user } = useContext(AuthContext)
+  const { data, loading, refetch } = useDashboardData()
 
   if (loading) return <LoadingSpinner />
 
+  const handleRemove = async (entryId) => {
+    try {
+      await axios.delete(`/user-challenges/${entryId}`)
+      toast.success("Challenge removed")
+      refetch() // refresh dashboard data
+    } catch (err) {
+      toast.error("Failed to remove challenge")
+      console.error(err)
+    }
+  }
+
   return (
-    <div className=" bg-white rounded shadow p-6">
+    <div className="bg-white rounded shadow p-6">
       <h2 className="text-3xl font-bold mb-6">Welcome, {user?.displayName}</h2>
 
-      {/* 🔗 Link to full dashboard */}
       {user?.uid && (
         <div className="mb-6">
           <Link
@@ -31,24 +41,20 @@ const MyActivities = () => {
 
       <section className="mb-10">
         <h3 className="text-xl font-semibold mb-4">Your Challenges</h3>
-        {data.challenges.map((c, index) => (
-          <ChallengeCard key={index} challenge={c} />
-        ))}
+        {data.challenges?.length > 0 ? (
+          data.challenges.map((entry) => (
+            <JoinedChallengeCard
+              key={entry._id}
+              entry={entry}
+              onRemove={handleRemove}
+            />
+          ))
+        ) : (
+          <p className="text-gray-500">
+            You haven't joined any challenges yet.
+          </p>
+        )}
       </section>
-
-      {/* <section className="mb-10">
-        <h3 className="text-xl font-semibold mb-4">Your Liked Tips</h3>
-        {data.tips.map((t) => (
-          <TipCard key={t._id} tip={t} />
-        ))}
-      </section>
-
-      <section>
-        <h3 className="text-xl font-semibold mb-4">Your Events</h3>
-        {data.events.map((e) => (
-          <EventCard key={e._id} event={e} />
-        ))}
-      </section> */}
     </div>
   )
 }

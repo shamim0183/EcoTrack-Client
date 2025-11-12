@@ -74,7 +74,7 @@ export default function EditChallenge() {
       setLoading(true)
       await axios.patch(`/challenges/${id}`, formData)
       toast.success("Challenge updated successfully!")
-      navigate("/challenges")
+      // navigate("/challenges")
     } catch (err) {
       toast.error("Failed to update challenge")
       console.error(err)

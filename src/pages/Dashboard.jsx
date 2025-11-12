@@ -48,7 +48,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10">
+    <div className="bg-white rounded shadow p-6">
       <h2 className="text-3xl font-bold mb-6">Your EcoTrack Dashboard</h2>
 
       {/* Challenges */}
@@ -131,7 +131,7 @@ export default function Dashboard() {
       </section>
 
       {/* Tips */}
-      <section className="mb-10">
+      {/* <section className="mb-10">
         <h3 className="text-xl font-semibold mb-4">Liked Tips</h3>
         {loading ? (
           <div className="grid gap-6">
@@ -148,10 +148,10 @@ export default function Dashboard() {
             ))}
           </ul>
         )}
-      </section>
+      </section> */}
 
       {/* Events */}
-      <section>
+      {/* <section>
         <h3 className="text-xl font-semibold mb-4">Events</h3>
         {loading ? (
           <div className="grid gap-6">
@@ -170,7 +170,7 @@ export default function Dashboard() {
             ))}
           </ul>
         )}
-      </section>
+      </section> */}
     </div>
   )
 }
