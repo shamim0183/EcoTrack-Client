@@ -3,6 +3,7 @@ import { useNavigate } from "react-router"
 import { AuthContext } from "../context/AuthContext"
 import axios from "../api/axios"
 import { toast } from "react-toastify"
+import Swal from "sweetalert2";
 
 export default function ChallengeCard({ challenge, onJoin, onDelete }) {
   // console.log( onJoin, onDelete)
@@ -26,7 +27,18 @@ export default function ChallengeCard({ challenge, onJoin, onDelete }) {
   }
 
   const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this challenge?")) return
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This challenge will be permanently deleted.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    })
+
+    if (!result.isConfirmed) return
+
     try {
       await axios.delete(`/challenges/${challenge._id}`)
       toast.success("Challenge deleted")
@@ -36,6 +48,7 @@ export default function ChallengeCard({ challenge, onJoin, onDelete }) {
       console.error(err)
     }
   }
+
 
   return (
     <div className="card bg-base-100 shadow-md p-6">
