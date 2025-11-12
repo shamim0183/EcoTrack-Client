@@ -1,4 +1,5 @@
 export default function EventCard({ event }) {
+  
   return (
     <div className="card bg-base-100 shadow-md p-6">
       <h4 className="text-lg font-bold">{event.title}</h4>
@@ -8,6 +9,9 @@ export default function EventCard({ event }) {
         Date: {new Date(event.date).toLocaleDateString()}
       </p>
       <p className="text-xs text-gray-400">Organizer: {event.organizer}</p>
+      <p className="text-xs text-gray-400">
+        Participants: {event.maxParticipants}
+      </p>
     </div>
   )
 }

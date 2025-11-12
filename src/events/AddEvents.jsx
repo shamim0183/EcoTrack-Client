@@ -107,6 +107,7 @@ if (!formData.title.trim()) {
           type="number"
           value={formData.maxParticipants}
           onChange={handleChange}
+          placeholder="Max Participants"
           className="input input-bordered w-full"
           required
         />
