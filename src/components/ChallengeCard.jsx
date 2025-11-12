@@ -6,12 +6,16 @@ import { toast } from "react-toastify"
 
 export default function ChallengeCard({ challenge, onJoin, onDelete }) {
   // console.log( onJoin, onDelete)
-  
+
   const { user } = useContext(AuthContext)
   const [joining, setJoining] = useState(false)
   const navigate = useNavigate()
 
   const handleJoin = async () => {
+    if (!user?.email) {
+      navigate("/login");
+      return;
+    }
     setJoining(true)
     await onJoin(challenge._id)
     setJoining(false)
@@ -53,16 +57,14 @@ export default function ChallengeCard({ challenge, onJoin, onDelete }) {
           {challenge.endDate?.slice(0, 10)}
         </p>
       </div>
-
-      <button
-        onClick={handleJoin}
-        className={`btn btn-success mt-4 w-full ${
-          joining ? "btn-disabled" : ""
-        }`}
-        disabled={joining}
-      >
-        {joining ? "Joining..." : "Join Challenge"}
-      </button>
+        <button
+          onClick={handleJoin}
+          className={`btn btn-success mt-4 w-full ${joining ? "btn-disabled" : ""
+            }`}
+          disabled={joining}
+        >
+          {joining ? "Joining..." : "Join Challenge"}
+        </button>
 
       {user?.email === challenge.createdBy && (
         <div className="mt-4 flex gap-2">
