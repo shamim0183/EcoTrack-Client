@@ -1,5 +1,5 @@
 import { useParams } from "react-router"
-import { useContext, useEffect, useState } from "react"
+import {  useEffect, useState } from "react"
 import axios from "../api/axios"
 import { AuthContext } from "../context/AuthContext"
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -7,8 +7,8 @@ import LoadingSpinner from "../components/LoadingSpinner";
 export default function ChallengeDetail() {
   const { id } = useParams()
   const [challenge, setChallenge] = useState(null)
-  const { user } = useContext(AuthContext)
-  const userEmail = user?.email
+  // const { user } = useContext(AuthContext)
+  // const userEmail = user?.email
 
   useEffect(() => {
     const fetchChallenge = async () => {
@@ -22,19 +22,19 @@ export default function ChallengeDetail() {
     fetchChallenge()
   }, [id])
 
-  const handleJoin = async () => {
-    if (!userEmail) {
-      alert("Please log in to join the challenge.")
-      return
-    }
+  // const handleJoin = async () => {
+  //   if (!userEmail) {
+  //     alert("Please log in to join the challenge.")
+  //     return
+  //   }
 
-    try {
-      const res = await axios.patch(`/challenges/join/${id}`, { userEmail })
-      setChallenge(res.data.challenge)
-    } catch (err) {
-      console.error("Failed to join challenge:", err)
-    }
-  }
+  //   try {
+  //     const res = await axios.patch(`/challenges/join/${id}`, { userEmail })
+  //     setChallenge(res.data.challenge)
+  //   } catch (err) {
+  //     console.error("Failed to join challenge:", err)
+  //   }
+  // }
 
   if (!challenge) return <LoadingSpinner />
 

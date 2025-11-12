@@ -1,14 +1,14 @@
-import { Link } from "react-router"
 import { useEffect, useState } from "react"
-import { FaLeaf, FaRecycle, FaChartLine } from "react-icons/fa"
-import heroImg from "../../assets/hero-track.avif"
-import { Swiper, SwiperSlide } from "swiper/react"
-import { Navigation, Pagination, Autoplay } from "swiper/modules"
+import { FaChartLine, FaLeaf, FaRecycle } from "react-icons/fa"
+import { Link } from "react-router"
 import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/pagination"
+import { Autoplay, Navigation, Pagination } from "swiper/modules"
+import { Swiper, SwiperSlide } from "swiper/react"
 import axios from "../../api/axios"
-import StatCard from "../../components/StatCard";
+import heroImg from "../../assets/hero-track.avif"
+import StatCard from "../../components/StatCard"
 
 export default function Home() {
   const [featuredChallenges, setFeaturedChallenges] = useState([])
@@ -29,11 +29,11 @@ export default function Home() {
             axios.get("/events"),
           ])
         setFeaturedChallenges(featuredRes.data)
-        
+
         setStats(statsRes.data)
         setActiveChallenges(activeRes.data)
         setRecentTips(tipsRes.data)
-        
+
         setUpcomingEvents(eventsRes.data)
       } catch (err) {
         console.error("Home page fetch error:", err)
@@ -232,5 +232,3 @@ export default function Home() {
     </div>
   )
 }
-
-
