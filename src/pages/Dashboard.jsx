@@ -15,7 +15,7 @@ export default function Dashboard() {
     const fetchDashboard = async () => {
       try {
         setLoading(true)
-        const res = await axios.get("/dashboard") // ✅ token auto-attached
+        const res = await axios.get("/dashboard") 
         setData(res.data)
       } catch (err) {
         toast.error("Failed to load dashboard")

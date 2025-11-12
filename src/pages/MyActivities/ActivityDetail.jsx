@@ -23,7 +23,7 @@ export default function ActivityDetail() {
     const fetchActivity = async () => {
       try {
         setLoading(true)
-        const res = await axios.get("/dashboard") // ✅ token-based access
+        const res = await axios.get("/dashboard") 
         setData(res.data)
       } catch (err) {
         toast.error("Failed to load activity")

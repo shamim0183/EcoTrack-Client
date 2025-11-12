@@ -1,36 +1,26 @@
+// import Swal from "sweetalert2"
 
-import Swal from "sweetalert2"
-import axios from "../api/axios"
-import { toast } from "react-toastify"
-
-export default function JoinedChallengeCard({ entry, onRemove }) {
+export default function JoinedChallengeCard({ entry,  }) {
   const challenge = entry.challenge
 
-  const handleRemove = async () => {
-    const result = await Swal.fire({
-      title: "Remove Challenge?",
-      text: "This will delete your progress for this challenge.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, remove it",
-    })
+  // const handleRemove = async () => {
+  //   const result = await Swal.fire({
+  //     title: "Remove Challenge?",
+  //     text: "This will delete your progress for this challenge.",
+  //     icon: "warning",
+  //     showCancelButton: true,
+  //     confirmButtonColor: "#d33",
+  //     cancelButtonColor: "#3085d6",
+  //     confirmButtonText: "Yes, remove it",
+  //   })
 
-    if (!result.isConfirmed) return
+  //   if (!result.isConfirmed) return
 
-    try {
-      await axios.delete(`/user-challenges/${entry._id}`)
-      toast.success("Challenge removed")
-      onRemove?.(entry._id)
-    } catch (err) {
-      toast.error("Failed to remove challenge")
-      console.error(err)
-    }
-  }
+  //   onRemove?.(entry._id)
+  // }
 
   return (
-    <div className="card bg-base-100 shadow-md p-6">
+    <div className="card bg-base-100 shadow-md p-6 mb-10">
       <img
         src={challenge.imageUrl}
         alt={challenge.title}
@@ -52,9 +42,9 @@ export default function JoinedChallengeCard({ entry, onRemove }) {
         </p>
       </div>
 
-      <button onClick={handleRemove} className="btn btn-error mt-4 w-full">
+      {/* <button onClick={handleRemove} className="btn btn-error mt-4 w-full">
         Remove Challenge
-      </button>
+      </button> */}
     </div>
   )
 }

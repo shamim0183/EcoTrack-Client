@@ -8,7 +8,7 @@ const useDashboardData = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("/dashboard") // ✅ no query param
+        const res = await axios.get("/dashboard") 
         setData(res.data)
       } catch (err) {
         console.error("Dashboard fetch error:", err)

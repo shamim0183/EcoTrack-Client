@@ -22,7 +22,6 @@ const useAuth = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  // ✅ Attach token to all Axios requests
   const getToken = async () => {
     if (!auth.currentUser) return null
     return await auth.currentUser.getIdToken()
@@ -34,7 +33,7 @@ const useAuth = () => {
       setLoading(false)
     })
 
-    // ✅ Axios interceptor
+   
     const attachToken = async (config) => {
       const token = await getToken()
       if (token) {

@@ -5,7 +5,7 @@ import { Link } from "react-router"
 import LoadingSpinner from "../../components/LoadingSpinner"
 import axios from "../../api/axios"
 import { toast } from "react-toastify"
-import JoinedChallengeCard from "../../Challenges/JoinedChallengeCard";
+import JoinedChallengeCard from "../../Challenges/JoinedChallengeCard"
 
 const MyActivities = () => {
   const { user } = useContext(AuthContext)
@@ -14,15 +14,22 @@ const MyActivities = () => {
   if (loading) return <LoadingSpinner />
 
   const handleRemove = async (entryId) => {
+    console.log("Removing entry:", entryId)
+    if (!entryId) {
+      toast.error("Invalid challenge entry")
+      return
+    }
+
     try {
       await axios.delete(`/user-challenges/${entryId}`)
-      toast.success("Challenge removed")
-      refetch() // refresh dashboard data
+      toast.success("Challenge removed. You can rejoin anytime.")
+      refetch()
     } catch (err) {
       toast.error("Failed to remove challenge")
       console.error(err)
     }
   }
+
 
   return (
     <div className="bg-white rounded shadow p-6">
