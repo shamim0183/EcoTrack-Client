@@ -2,6 +2,7 @@ import { useParams } from "react-router"
 import { useContext, useEffect, useState } from "react"
 import axios from "../api/axios"
 import { AuthContext } from "../context/AuthContext"
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function ChallengeDetail() {
   const { id } = useParams()
@@ -35,7 +36,7 @@ export default function ChallengeDetail() {
     }
   }
 
-  if (!challenge) return <div>Loading...</div>
+  if (!challenge) return <LoadingSpinner />
 
   return (
     <div className="max-w-3xl mx-auto p-6">

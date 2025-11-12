@@ -5,12 +5,13 @@ import EventCard from "../../components/EventCard"
 import { AuthContext } from "../../context/AuthContext"
 import { use } from "react"
 import { Link } from "react-router"
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 const MyActivities = () => {
   const { user } = use(AuthContext)
   const { data, loading } = useDashboardData()
 
-  if (loading) return <p>Loading your activities...</p>
+  if (loading) return <LoadingSpinner />
 
   return (
     <div className=" bg-white rounded shadow p-6">
