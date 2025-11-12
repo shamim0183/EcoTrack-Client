@@ -53,9 +53,6 @@ export default function ChallengeDetail() {
       <p className="mt-2 text-sm text-base-content">
         Participants: {challenge.participants}
       </p>
-      <button onClick={handleJoin} className="btn btn-primary mt-4">
-        Join Challenge
-      </button>
     </div>
   )
 }

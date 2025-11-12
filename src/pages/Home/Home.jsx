@@ -142,7 +142,7 @@ export default function Home() {
                       to={`/challenges/${ch._id}`}
                       className="btn btn-sm btn-primary mt-2"
                     >
-                      Join
+                      Details
                     </Link>
                   </div>
                 </div>
