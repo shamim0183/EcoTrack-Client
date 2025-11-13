@@ -1,11 +1,11 @@
-import { useState,  use } from "react"
+import { useState, useContext } from "react"
 import axios from "../api/axios"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../context/AuthContext"
 
 export default function AddEvents() {
-  const { user } = use(AuthContext)
+  const { user } = useContext(AuthContext)
 
   const [formData, setFormData] = useState({
     title: "",
@@ -19,7 +19,10 @@ export default function AddEvents() {
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === "maxParticipants" ? parseInt(value) : value,
+    }))
   }
 
   const handleSubmit = async (e) => {
@@ -30,6 +33,16 @@ export default function AddEvents() {
       return
     }
 
+    if (!formData.title.trim()) {
+      toast.error("Title is required")
+      return
+    }
+
+    if (formData.maxParticipants > 50) {
+      toast.error("Max participants cannot exceed 50")
+      return
+    }
+
     const payload = {
       ...formData,
       organizer: user.email,
@@ -37,11 +50,6 @@ export default function AddEvents() {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     }
-if (!formData.title.trim()) {
-  toast.error("Title is required")
-  return
-}
-
 
     try {
       setLoading(true)
@@ -107,14 +115,16 @@ if (!formData.title.trim()) {
           type="number"
           value={formData.maxParticipants}
           onChange={handleChange}
-          placeholder="Max Participants"
+          placeholder="Max Participants (up to 50)"
           className="input input-bordered w-full"
           required
+          min={1}
+          max={50}
         />
 
         <button
           type="submit"
-          className={`btn btn-primary w-full ${loading ? "btnocatioled" : ""}`}
+          className={`btn btn-primary w-full ${loading ? "btn-disabled" : ""}`}
           disabled={loading}
         >
           {loading ? (
