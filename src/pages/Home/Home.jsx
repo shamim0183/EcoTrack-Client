@@ -21,6 +21,8 @@ export default function Home() {
     const fetchData = async () => {
       try {
         const [featuredRes, statsRes, activeRes, tipsRes, eventsRes] =
+          
+          
           await Promise.all([
             axios.get("/challenges"),
             axios.get("/stats"),
@@ -31,6 +33,8 @@ export default function Home() {
         setFeaturedChallenges(featuredRes.data)
 
         setStats(statsRes.data)
+        console.log(statsRes)
+        
         setActiveChallenges(activeRes.data)
         setRecentTips(tipsRes.data)
 

@@ -34,18 +34,35 @@ export default function AddChallenge() {
       return
     }
 
+    if (!formData.title.trim()) {
+      toast.error("Title is required")
+      return
+    }
+
+    const metricRaw = formData.impactMetric.trim()
+    const metricPattern = /^[0-9]+(\.[0-9]+)?[a-zA-Z]+$/
+    if (!metricPattern.test(metricRaw)) {
+      toast.error(
+        "Impact Metric must include a number followed by a unit (e.g. 15kg, 20kWh)"
+      )
+      return
+    }
+
+    try {
+      new URL(formData.imageUrl)
+    } catch {
+      toast.error("Image URL must be a valid URL")
+      return
+    }
+
     const payload = {
       ...formData,
+      impactMetric: metricRaw.toLowerCase(),
       createdBy: user.email,
       participants: 0,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     }
-if (!formData.title.trim()) {
-  toast.error("Title is required")
-  return
-}
-
 
     try {
       setLoading(true)
@@ -115,6 +132,7 @@ if (!formData.title.trim()) {
           placeholder="Duration (days)"
           className="input input-bordered w-full"
           required
+          min="1"
         />
 
         <input
@@ -128,9 +146,10 @@ if (!formData.title.trim()) {
 
         <input
           name="impactMetric"
+          type="text"
           value={formData.impactMetric}
           onChange={handleChange}
-          placeholder="Impact Metric (e.g. kg plastic saved)"
+          placeholder="Impact Metric (e.g. 15kg, 20kWh)"
           className="input input-bordered w-full"
           required
         />
@@ -155,9 +174,10 @@ if (!formData.title.trim()) {
 
         <input
           name="imageUrl"
+          type="url"
           value={formData.imageUrl}
           onChange={handleChange}
-          placeholder="Image URL"
+          placeholder="Image URL (must be valid)"
           className="input input-bordered w-full"
           required
         />
