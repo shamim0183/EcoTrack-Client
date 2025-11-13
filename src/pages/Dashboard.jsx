@@ -130,47 +130,7 @@ export default function Dashboard() {
         )}
       </section>
 
-      {/* Tips */}
-      {/* <section className="mb-10">
-        <h3 className="text-xl font-semibold mb-4">Liked Tips</h3>
-        {loading ? (
-          <div className="grid gap-6">
-            {[...Array(2)].map((_, i) => (
-              <SkeletonCard key={i} />
-            ))}
-          </div>
-        ) : data.tips.length === 0 ? (
-          <p>No tips liked yet.</p>
-        ) : (
-          <ul className="list-disc pl-5">
-            {data.tips.map((tip) => (
-              <li key={tip._id}>{tip.content}</li>
-            ))}
-          </ul>
-        )}
-      </section> */}
 
-      {/* Events */}
-      {/* <section>
-        <h3 className="text-xl font-semibold mb-4">Events</h3>
-        {loading ? (
-          <div className="grid gap-6">
-            {[...Array(2)].map((_, i) => (
-              <SkeletonCard key={i} />
-            ))}
-          </div>
-        ) : data.events.length === 0 ? (
-          <p>No events RSVP’d yet.</p>
-        ) : (
-          <ul className="list-disc pl-5">
-            {data.events.map((event) => (
-              <li key={event._id}>
-                {event.title} — {new Date(event.date).toLocaleDateString()}
-              </li>
-            ))}
-          </ul>
-        )}
-      </section> */}
     </div>
   )
 }
