@@ -8,7 +8,7 @@ export default function DashboardLayout() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <Navbar />
-      <Container className="py-6">
+      <Container className=" py-6">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar always visible */}
           <aside className="col-span-1 bg-white p-4 rounded shadow">

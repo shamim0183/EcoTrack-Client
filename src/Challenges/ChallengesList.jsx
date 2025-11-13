@@ -87,9 +87,10 @@ export default function ChallengesList() {
           <div className="flex flex-wrap gap-2">
             {[
               "Waste Reduction",
-              "Energy Saving",
               "Water Conservation",
-              "Recycling",
+              "Sustainable Transport",
+              "Green Living",
+              "Energy Conservation"
             ].map((cat) => (
               <button
                 key={cat}
