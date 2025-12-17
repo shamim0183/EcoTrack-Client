@@ -125,19 +125,7 @@ h6 {
   outline-offset: 2px;
 }
 
-/* Global Link Styles */
-a {
-  color: #2d6a4f;
-  transition: color 0.2s ease;
-}
-
-a:hover {
-  color: #40916c;
-}
-
-a:active {
-  color: #1b4332;
-}
+/* Global Link Styles - Removed to allow component-level control */
 
 /* Button Hover States */
 button:not(.btn-eco) {

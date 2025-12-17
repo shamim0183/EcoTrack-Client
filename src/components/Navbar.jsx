@@ -57,49 +57,29 @@ const Navbar = () => {
             >
               {publicLinks.map(({ label, to }) => (
                 <li key={label}>
-                  <MyLink
-                    to={to}
-                    className="text-gray-900 hover:bg-eco-primary/10 hover:text-eco-primary font-medium"
-                  >
-                    {label}
-                  </MyLink>
+                  <MyLink to={to}>{label}</MyLink>
                 </li>
               ))}
               {!user ? (
                 <>
                   <li>
-                    <MyLink
-                      to="/login"
-                      className="text-gray-900 hover:bg-eco-success hover:text-white font-medium"
-                    >
-                      Login
-                    </MyLink>
+                    <MyLink to="/login">Login</MyLink>
                   </li>
                   <li>
-                    <MyLink
-                      to="/register"
-                      className="text-gray-900 hover:bg-eco-success hover:text-white font-medium"
-                    >
-                      Register
-                    </MyLink>
+                    <MyLink to="/register">Register</MyLink>
                   </li>
                 </>
               ) : (
                 <>
                   {dropdownLinks.map(({ label, to }) => (
                     <li key={label}>
-                      <MyLink
-                        to={to}
-                        className="text-gray-900 hover:bg-eco-success hover:text-white font-medium"
-                      >
-                        {label}
-                      </MyLink>
+                      <MyLink to={to}>{label}</MyLink>
                     </li>
                   ))}
                   <li>
                     <button
                       onClick={handleLogout}
-                      className="text-gray-900 hover:bg-eco-primary/10 hover:text-eco-primary font-medium w-full text-left rounded-lg transition-all px-4 py-2"
+                      className="text-gray-700 hover:bg-eco-primary hover:text-white font-medium w-full text-left rounded-lg transition-all px-4 py-2"
                     >
                       Logout
                     </button>
@@ -186,10 +166,7 @@ const Navbar = () => {
                 <ul className="absolute right-0 mt-3 w-48 bg-white shadow-lg rounded-box z-[100] p-2 space-y-2 border border-gray-200">
                   {dropdownLinks.map(({ label, to }) => (
                     <li key={label}>
-                      <MyLink
-                        to={to}
-                        className="block px-4 py-2 text-gray-900 hover:bg-eco-primary/10 hover:text-eco-primary rounded-lg transition-all font-medium"
-                      >
+                      <MyLink to={to} className="block">
                         {label}
                       </MyLink>
                     </li>
@@ -197,7 +174,7 @@ const Navbar = () => {
                   <li>
                     <button
                       onClick={handleLogout}
-                      className="block w-full text-left px-4 py-2 text-gray-900 hover:bg-eco-primary/10 hover:text-eco-primary rounded-lg transition-all font-medium"
+                      className="block w-full text-left text-gray-700 hover:bg-eco-primary hover:text-white rounded-lg transition-all font-medium px-4 py-2"
                     >
                       Logout
                     </button>
