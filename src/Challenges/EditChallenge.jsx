@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from "react"
-import { useParams, useNavigate } from "react-router"
-import axios from "../api/axios"
+import { FaEdit, FaInfoCircle } from "react-icons/fa"
+import { useNavigate, useParams } from "react-router"
 import { toast } from "react-toastify"
+import axios from "../api/axios"
 import { AuthContext } from "../context/AuthContext"
 
 export default function EditChallenge() {
@@ -29,9 +30,7 @@ export default function EditChallenge() {
         const res = await axios.get(`/challenges/${id}`)
         const challenge = res.data
 
-        if (
-          challenge.createdBy !== user?.email 
-        ) {
+        if (challenge.createdBy !== user?.email) {
           toast.error("Access denied: You can't edit this challenge.")
           navigate("/challenges")
           return
@@ -74,7 +73,7 @@ export default function EditChallenge() {
       setLoading(true)
       await axios.patch(`/challenges/${id}`, formData)
       toast.success("Challenge updated successfully!")
-      // navigate("/challenges")
+      navigate("/challenges")
     } catch (err) {
       toast.error("Failed to update challenge")
       console.error(err)
@@ -84,112 +83,206 @@ export default function EditChallenge() {
   }
 
   return (
-    <div className="p-6 bg-white rounded shadow">
-      <h2 className="text-3xl font-bold mb-6">Edit Challenge</h2>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <input
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          placeholder="Title"
-          className="input input-bordered w-full"
-          required
-        />
+    <div className="min-h-screen bg-gray-50 py-12 px-4">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="bg-white rounded-xl shadow-md p-8 mb-8">
+          <div className="flex items-center gap-3 mb-2">
+            <FaEdit className="text-4xl text-eco-primary" />
+            <h1 className="text-4xl font-bold text-gray-900">Edit Challenge</h1>
+          </div>
+          <p className="text-gray-600">
+            Update your challenge details and save changes to keep participants
+            informed.
+          </p>
+        </div>
 
-        <select
-          name="category"
-          value={formData.category}
-          onChange={handleChange}
-          className="select select-bordered w-full"
-          required
+        {/* Form */}
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white rounded-xl shadow-md p-8"
         >
-          <option value="">Select Category</option>
-          <option>Energy Conservation</option>
-          <option>Water Conservation</option>
-          <option>Sustainable Transport</option>
-          <option>Green Living</option>
-          <option>Waste Reduction</option>
-        </select>
+          <div className="space-y-6">
+            {/* Challenge Title */}
+            <div>
+              <label className="block text-sm font-bold text-gray-900 mb-2">
+                Challenge Title *
+              </label>
+              <input
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                placeholder="e.g., 30-Day Plastic-Free Challenge"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-eco-primary focus:border-transparent text-gray-900 placeholder-gray-400"
+                required
+              />
+            </div>
 
-        <textarea
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          placeholder="Description"
-          className="textarea textarea-bordered w-full"
-          required
-        />
+            {/* Category */}
+            <div>
+              <label className="block text-sm font-bold text-gray-900 mb-2">
+                Category *
+              </label>
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-eco-primary focus:border-transparent text-gray-900 bg-white"
+                required
+              >
+                <option value="">Select a category...</option>
+                <option>Energy Conservation</option>
+                <option>Water Conservation</option>
+                <option>Sustainable Transport</option>
+                <option>Green Living</option>
+                <option>Waste Reduction</option>
+              </select>
+            </div>
 
-        <input
-          name="duration"
-          type="number"
-          value={formData.duration}
-          onChange={handleChange}
-          placeholder="Duration (days)"
-          className="input input-bordered w-full"
-          required
-        />
+            {/* Description */}
+            <div>
+              <label className="block text-sm font-bold text-gray-900 mb-2">
+                Description *
+              </label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Describe your challenge in detail..."
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-eco-primary focus:border-transparent text-gray-900 placeholder-gray-400 min-h-[120px]"
+                required
+              />
+            </div>
 
-        <input
-          name="target"
-          value={formData.target}
-          onChange={handleChange}
-          placeholder="Target Goal"
-          className="input input-bordered w-full"
-          required
-        />
+            {/* Duration and Target in Grid */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-bold text-gray-900 mb-2">
+                  Duration (Days) *
+                </label>
+                <input
+                  name="duration"
+                  type="number"
+                  value={formData.duration}
+                  onChange={handleChange}
+                  placeholder="e.g., 30"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-eco-primary focus:border-transparent text-gray-900 placeholder-gray-400"
+                  required
+                  min="1"
+                />
+              </div>
 
-        <input
-          name="impactMetric"
-          value={formData.impactMetric}
-          onChange={handleChange}
-          placeholder="Impact Metric (e.g. kg plastic saved)"
-          className="input input-bordered w-full"
-          required
-        />
+              <div>
+                <label className="block text-sm font-bold text-gray-900 mb-2">
+                  Target Goal *
+                </label>
+                <input
+                  name="target"
+                  value={formData.target}
+                  onChange={handleChange}
+                  placeholder="e.g., Reduce plastic waste by 50%"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-eco-primary focus:border-transparent text-gray-900 placeholder-gray-400"
+                  required
+                />
+              </div>
+            </div>
 
-        <input
-          name="startDate"
-          type="date"
-          value={formData.startDate}
-          onChange={handleChange}
-          className="input input-bordered w-full"
-          required
-        />
+            {/* Impact Metric */}
+            <div>
+              <label className="block text-sm font-bold text-gray-900 mb-2">
+                Impact Metric *
+              </label>
+              <input
+                name="impactMetric"
+                type="text"
+                value={formData.impactMetric}
+                onChange={handleChange}
+                placeholder="e.g., 15kg or 20kWh"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-eco-primary focus:border-transparent text-gray-900 placeholder-gray-400"
+                required
+              />
+              <div className="mt-2 flex items-start gap-2 bg-blue-50 border border-blue-200 rounded-lg p-3">
+                <FaInfoCircle className="text-blue-500 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-blue-900">
+                  <strong>Format:</strong> Number + Unit (no space)
+                  <br />
+                  <strong>Examples:</strong> 15kg, 20kWh, 100L, 500g
+                </p>
+              </div>
+            </div>
 
-        <input
-          name="endDate"
-          type="date"
-          value={formData.endDate}
-          onChange={handleChange}
-          className="input input-bordered w-full"
-          required
-        />
+            {/* Dates in Grid */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-bold text-gray-900 mb-2">
+                  Start Date *
+                </label>
+                <input
+                  name="startDate"
+                  type="date"
+                  value={formData.startDate}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-eco-primary focus:border-transparent text-gray-900"
+                  required
+                />
+              </div>
 
-        <input
-          name="imageUrl"
-          value={formData.imageUrl}
-          onChange={handleChange}
-          placeholder="Image URL"
-          className="input input-bordered w-full"
-          required
-        />
+              <div>
+                <label className="block text-sm font-bold text-gray-900 mb-2">
+                  End Date *
+                </label>
+                <input
+                  name="endDate"
+                  type="date"
+                  value={formData.endDate}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-eco-primary focus:border-transparent text-gray-900"
+                  required
+                />
+              </div>
+            </div>
 
-        <button
-          type="submit"
-          className={`btn btn-primary w-full ${loading ? "btn-disabled" : ""}`}
-          disabled={loading}
-        >
-          {loading ? (
-            <span className="flex items-center justify-center gap-2">
-              <span className="loading loading-spinner loading-sm"></span>
-              Updating…
-            </span>
-          ) : (
-            "Update Challenge"
-          )}
-        </button>
-      </form>
+            {/* Image URL */}
+            <div>
+              <label className="block text-sm font-bold text-gray-900 mb-2">
+                Image URL *
+              </label>
+              <input
+                name="imageUrl"
+                type="url"
+                value={formData.imageUrl}
+                onChange={handleChange}
+                placeholder="https://images.unsplash.com/photo-..."
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-eco-primary focus:border-transparent text-gray-900 placeholder-gray-400"
+                required
+              />
+            </div>
+
+            {/* Submit Button */}
+            <div className="pt-6 border-t border-gray-200">
+              <button
+                type="submit"
+                className={`w-full bg-eco-primary hover:bg-eco-primary-dark text-white font-bold text-lg py-4 px-8 rounded-lg transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 ${
+                  loading ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+                disabled={loading}
+              >
+                {loading ? (
+                  <span className="flex items-center justify-center gap-3">
+                    <span className="loading loading-spinner loading-md"></span>
+                    Updating...
+                  </span>
+                ) : (
+                  <span className="flex items-center justify-center gap-2">
+                    <FaEdit />
+                    Update Challenge
+                  </span>
+                )}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }

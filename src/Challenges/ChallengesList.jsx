@@ -1,8 +1,10 @@
-import { useEffect, useState} from "react"
+import { motion } from "framer-motion"
+import { useEffect, useState } from "react"
+import { FaCalendar, FaFilter, FaTimes, FaUsers } from "react-icons/fa"
+import { toast } from "react-toastify"
 import axios from "../api/axios"
 import ChallengeCard from "../components/ChallengeCard"
 import SkeletonCard from "../components/SkeletonCard"
-import { toast } from "react-toastify"
 
 export default function ChallengesList() {
   const [challenges, setChallenges] = useState([])
@@ -39,13 +41,7 @@ export default function ChallengesList() {
 
   useEffect(() => {
     fetchFilteredChallenges()
-  }, [
-    selectedCategories,
-    startDate,
-    endDate,
-    minParticipants,
-    maxParticipants,
-  ])
+  }, [selectedCategories, startDate, endDate, minParticipants, maxParticipants])
 
   const handleCategoryToggle = (category) => {
     setSelectedCategories((prev) =>
@@ -55,11 +51,18 @@ export default function ChallengesList() {
     )
   }
 
+  const handleClearFilters = () => {
+    setSelectedCategories([])
+    setStartDate("")
+    setEndDate("")
+    setMinParticipants("")
+    setMaxParticipants("")
+  }
+
   const handleJoin = async (challengeId) => {
     try {
       await axios.post("/user-challenges/join", {
         challengeId,
-        
       })
       toast.success("Challenge joined!")
     } catch (err) {
@@ -76,100 +79,194 @@ export default function ChallengesList() {
     setChallenges((prev) => prev.filter((c) => c._id !== deletedId))
   }
 
+  const hasActiveFilters =
+    selectedCategories.length > 0 ||
+    startDate ||
+    endDate ||
+    minParticipants ||
+    maxParticipants
+
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10">
-      <h2 className="text-3xl font-bold mb-6">Browse Challenges</h2>
-
-      {/* Filters */}
-      <div className="mb-8 space-y-4">
-        <div>
-          <label className="font-semibold block mb-1">Categories</label>
-          <div className="flex flex-wrap gap-2">
-            {[
-              "Waste Reduction",
-              "Water Conservation",
-              "Sustainable Transport",
-              "Green Living",
-              "Energy Conservation"
-            ].map((cat) => (
-              <button
-                key={cat}
-                onClick={() => handleCategoryToggle(cat)}
-                className={`btn btn-sm ${
-                  selectedCategories.includes(cat)
-                    ? "btn-primary"
-                    : "btn-outline"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="flex gap-4">
-          <div>
-            <label className="block text-sm font-medium">Start Date</label>
-            <input
-              type="date"
-              className="input input-bordered"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium">End Date</label>
-            <input
-              type="date"
-              className="input input-bordered"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-            />
-          </div>
-        </div>
-
-        <div className="flex gap-4">
-          <div>
-            <label className="block text-sm font-medium">
-              Min Participants
-            </label>
-            <input
-              type="number"
-              className="input input-bordered"
-              value={minParticipants}
-              onChange={(e) => setMinParticipants(e.target.value)}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium">
-              Max Participants
-            </label>
-            <input
-              type="number"
-              className="input input-bordered"
-              value={maxParticipants}
-              onChange={(e) => setMaxParticipants(e.target.value)}
-            />
-          </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header Section */}
+      <div className="bg-gradient-to-r from-eco-primary to-eco-primary-dark text-white py-16">
+        <div className="max-w-screen-2xl mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h1 className="text-5xl font-bold mb-4">Browse Challenges</h1>
+            <p className="text-xl text-gray-100 max-w-3xl">
+              Join popular challenges and start making an impact today
+            </p>
+          </motion.div>
         </div>
       </div>
 
-      {/* Challenge Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {loading ? (
-          [...Array(3)].map((_, i) => <SkeletonCard key={i} />)
-        ) : challenges.length === 0 ? (
-          <p>No challenges found.</p>
-        ) : (
-          challenges.map((challenge) => (
-            <ChallengeCard
-              key={challenge._id}
-              challenge={challenge}
-              onJoin={handleJoin}
-              onDelete={handleDelete}
-            />
-          ))
-        )}
+      <div className="max-w-screen-2xl mx-auto px-4 py-10">
+        {/* Filters Section */}
+        <div className="bg-white rounded-xl shadow-md p-6 mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-2">
+              <FaFilter className="text-eco-primary text-xl" />
+              <h2 className="text-2xl font-bold text-gray-900">Filters</h2>
+            </div>
+            {hasActiveFilters && (
+              <button
+                onClick={handleClearFilters}
+                className="inline-flex items-center gap-2 text-sm text-red-600 hover:text-red-700 font-semibold"
+              >
+                <FaTimes />
+                Clear All Filters
+              </button>
+            )}
+          </div>
+
+          <div className="space-y-6">
+            {/* Categories */}
+            <div>
+              <label className="block text-sm font-bold text-gray-900 mb-3">
+                Categories
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  "Waste Reduction",
+                  "Water Conservation",
+                  "Sustainable Transport",
+                  "Green Living",
+                  "Energy Conservation",
+                ].map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => handleCategoryToggle(cat)}
+                    className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all ${
+                      selectedCategories.includes(cat)
+                        ? "bg-eco-primary text-white shadow-md"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Date Range */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-bold text-gray-900 mb-2 flex items-center gap-2">
+                  <FaCalendar className="text-eco-primary" />
+                  Start Date
+                </label>
+                <input
+                  type="date"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-eco-primary focus:border-transparent text-gray-900"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-gray-900 mb-2 flex items-center gap-2">
+                  <FaCalendar className="text-eco-primary" />
+                  End Date
+                </label>
+                <input
+                  type="date"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-eco-primary focus:border-transparent text-gray-900"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* Participants Range */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-bold text-gray-900 mb-2 flex items-center gap-2">
+                  <FaUsers className="text-eco-primary" />
+                  Min Participants
+                </label>
+                <input
+                  type="number"
+                  placeholder="e.g., 5"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-eco-primary focus:border-transparent text-gray-900 placeholder-gray-400"
+                  value={minParticipants}
+                  onChange={(e) => setMinParticipants(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-gray-900 mb-2 flex items-center gap-2">
+                  <FaUsers className="text-eco-primary" />
+                  Max Participants
+                </label>
+                <input
+                  type="number"
+                  placeholder="e.g., 100"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-eco-primary focus:border-transparent text-gray-900 placeholder-gray-400"
+                  value={maxParticipants}
+                  onChange={(e) => setMaxParticipants(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Results Header */}
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-2xl font-bold text-gray-900">
+            {loading ? (
+              "Loading..."
+            ) : (
+              <>
+                {challenges.length} Challenge
+                {challenges.length !== 1 ? "s" : ""} Found
+              </>
+            )}
+          </h3>
+        </div>
+
+        {/* Challenge Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {loading ? (
+            [...Array(8)].map((_, i) => <SkeletonCard key={i} />)
+          ) : challenges.length === 0 ? (
+            <div className="col-span-full text-center py-16">
+              <div className="inline-flex items-center justify-center w-24 h-24 bg-gray-100 rounded-full mb-4">
+                <FaFilter className="text-4xl text-gray-400" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                No Challenges Found
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Try adjusting your filters to see more results
+              </p>
+              {hasActiveFilters && (
+                <button
+                  onClick={handleClearFilters}
+                  className="bg-eco-primary hover:bg-eco-primary-dark text-white font-semibold py-3 px-6 rounded-lg transition-all"
+                >
+                  Clear All Filters
+                </button>
+              )}
+            </div>
+          ) : (
+            challenges.map((challenge, index) => (
+              <motion.div
+                key={challenge._id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+              >
+                <ChallengeCard
+                  challenge={challenge}
+                  onJoin={handleJoin}
+                  onDelete={handleDelete}
+                />
+              </motion.div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   )

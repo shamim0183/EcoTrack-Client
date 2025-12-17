@@ -1,18 +1,187 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap");
 
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: light --default, dark --prefersdark, synthwave;
+  themes: ecolight --default, ecodark --prefersdark;
 }
 
 @theme {
-  --font-Poppins: "Poppins", sans-serif;
-  --font-Playfair: "Playfair Display", serif;
+  /* Custom Fonts */
+  --font-inter: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-poppins: "Poppins", ui-sans-serif, system-ui, sans-serif;
+
+  /* Eco Color Palette */
+  --color-eco-primary: #2d6a4f;
+  --color-eco-primary-light: #52b788;
+  --color-eco-primary-dark: #1b4332;
+  --color-eco-secondary: #95d5b2;
+  --color-eco-accent: #74c69d;
+  --color-eco-cream: #fefae0;
+  --color-eco-sand: #f8f9fa;
+  --color-eco-success: #40916c;
+  --color-eco-warning: #ffa500;
+  --color-eco-error: #d62828;
+  --color-eco-info: #4cc9f0;
+
+  /* EventChamp Gray Scale */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+
+  /* EventChamp Accent Colors */
+  --color-amber-500: #f59e0b;
+  --color-blue-500: #3b82f6;
+  --color-emerald-500: #10b981;
+  --color-red-500: #ef4444;
+  --color-green-500: #22c55e;
+  --color-green-600: #16a34a;
+  --color-emerald-600: #059669;
+  --color-emerald-700: #047857;
+  --color-teal-600: #0d9488;
+  --color-cyan-600: #0891b2;
+  --color-orange-600: #ea580c;
+  --color-lime-500: #84cc16;
+
+  /* Border Radius */
+  --radius-eco: 24px;
+  --radius-eco-sm: 16px;
+  --radius-eco-lg: 32px;
+
+  /* Shadows */
+  --shadow-eco: 0 4px 20px rgb(45 106 79 / 0.15);
+  --shadow-eco-lg: 0 12px 40px rgb(45 106 79 / 0.2);
+  --shadow-eco-hover: 0 8px 30px rgb(45 106 79 / 0.25);
+  --shadow-glass: 0 8px 32px 0 rgb(31 38 135 / 0.15);
 }
 
 body {
-  font-family: var(--font-Poppins);
+  font-family: var(--font-inter);
 }
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-Playfair);
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-poppins);
+  font-weight: 600;
+}
+
+/* Glassmorphism Utility Classes */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Eco Button Styles */
+.btn-eco {
+  background: linear-gradient(135deg, #52b788, #2d6a4f);
+  border: none;
+  border-radius: 50px;
+  padding: 12px 32px;
+  color: white;
+  font-weight: 600;
+  box-shadow: var(--shadow-eco);
+  transition: all 0.3s ease;
+}
+
+.btn-eco:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-eco-hover);
+  background: linear-gradient(135deg, #40916c, #1b4332);
+}
+
+.btn-eco:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-eco);
+}
+
+.btn-eco:focus {
+  outline: 2px solid #52b788;
+  outline-offset: 2px;
+}
+
+/* Global Link Styles */
+a {
+  color: #2d6a4f;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #40916c;
+}
+
+a:active {
+  color: #1b4332;
+}
+
+/* Button Hover States */
+button:not(.btn-eco) {
+  transition: all 0.2s ease;
+}
+
+/* Glass Button Hover */
+.glass-strong:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.glass-strong:active {
+  transform: translateY(0);
+}
+
+/* Smooth Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Leaf Particle Animation */
+@keyframes leaf-fall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.leaf-particle {
+  animation: leaf-fall 15s linear infinite;
 }

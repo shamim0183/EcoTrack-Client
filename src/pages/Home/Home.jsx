@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react"
-import { FaChartLine, FaLeaf, FaRecycle } from "react-icons/fa"
 import { Link } from "react-router"
-import "swiper/css"
-import "swiper/css/navigation"
-import "swiper/css/pagination"
-import { Autoplay, Navigation, Pagination } from "swiper/modules"
-import { Swiper, SwiperSlide } from "swiper/react"
 import axios from "../../api/axios"
-import heroImg from "../../assets/hero-track.avif"
-import StatCard from "../../components/StatCard"
+import CategoryBrowseGrid from "../../components/CategoryBrowseGrid"
+import HowItWorksSection from "../../components/HowItWorksSection"
+import SearchHeroSection from "../../components/SearchHeroSection"
+import StatsSection from "../../components/StatsSection"
+import TestimonialsCarousel from "../../components/TestimonialsCarousel"
+import TopEcoWarriorsSection from "../../components/TopEcoWarriorsSection"
+import WhyGoGreenSection from "../../components/WhyGoGreenSection"
 
 export default function Home() {
   const [featuredChallenges, setFeaturedChallenges] = useState([])
@@ -21,8 +20,6 @@ export default function Home() {
     const fetchData = async () => {
       try {
         const [featuredRes, statsRes, activeRes, tipsRes, eventsRes] =
-          
-          
           await Promise.all([
             axios.get("/challenges"),
             axios.get("/stats"),
@@ -31,13 +28,9 @@ export default function Home() {
             axios.get("/events"),
           ])
         setFeaturedChallenges(featuredRes.data)
-
         setStats(statsRes.data)
-        console.log(statsRes)
-        
         setActiveChallenges(activeRes.data)
         setRecentTips(tipsRes.data)
-
         setUpcomingEvents(eventsRes.data)
       } catch (err) {
         console.error("Home page fetch error:", err)
@@ -47,192 +40,253 @@ export default function Home() {
   }, [])
 
   return (
-    <div className="bg-base-100">
-      {/* Hero Banner */}
-      <section className="max-w-7xl mx-auto py-12">
-        {featuredChallenges.length === 0 ? (
-          <div className="h-[300px] md:h-[400px] bg-base-200 animate-pulse rounded-lg" />
-        ) : (
-          <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
-            navigation
-            pagination={{ clickable: true }}
-            autoplay={{ delay: 4000 }}
-            loop
-            className="rounded-lg shadow-lg"
-          >
-            {featuredChallenges.map((challenge) => (
-              <SwiperSlide key={challenge._id}>
-                <div className="relative w-full h-[300px] md:h-[400px]">
-                  <img
-                    src={challenge.imageUrl || heroImg}
-                    alt={challenge.title}
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                  <div className="absolute bottom-4 left-4 bg-base-200 bg-opacity-80 p-4 rounded">
-                    <h2 className="text-xl font-bold">{challenge.title}</h2>
-                    <Link
-                      to={`/challenges/${challenge._id}`}
-                      className="btn btn-primary mt-2"
-                    >
-                      View Challenge
-                    </Link>
-                  </div>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        )}
-      </section>
+    <div className="min-h-screen">
+      {/* Search Hero Section */}
+      <SearchHeroSection />
 
-      {/* Live Statistics */}
-      <section className="bg-base-200 py-10">
-        <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-6 text-center">
-          {Object.keys(stats).length === 0 ? (
-            [...Array(3)].map((_, i) => (
-              <div key={i} className="h-24 bg-base-300 animate-pulse rounded" />
-            ))
-          ) : (
-            <>
-              <StatCard
-                icon={<FaLeaf />}
-                value={stats.co2Saved}
-                label="CO₂ Saved"
-                unit="kg"
-              />
-              <StatCard
-                icon={<FaRecycle />}
-                value={stats.plasticReduced}
-                label="Plastic Reduced"
-                unit="kg"
-              />
-              <StatCard
-                icon={<FaChartLine />}
-                value={stats.energySaved}
-                label="Energy Saved"
-                unit="kWh"
-              />
-            </>
-          )}
-        </div>
-      </section>
+      {/* Category Browse Grid */}
+      <CategoryBrowseGrid />
 
       {/* Active Challenges */}
-      <section className="max-w-7xl mx-auto px-4 py-12">
-        <h2 className="text-3xl font-bold mb-6">Active Challenges</h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          {activeChallenges.length === 0
-            ? [...Array(3)].map((_, i) => (
-                <div
-                  key={i}
-                  className="h-64 bg-base-200 animate-pulse rounded"
-                />
-              ))
-            : activeChallenges.map((ch) => (
-                <div key={ch._id} className="card bg-base-200 shadow">
-                  <figure>
-                    <img
-                      src={ch.imageUrl || heroImg}
-                      alt={ch.title}
-                      className="h-40 w-full object-cover"
-                    />
-                  </figure>
-                  <div className="card-body">
-                    <h3 className="card-title">{ch.title}</h3>
-                    <p className="text-sm text-base-content">
-                      {ch.category} • {ch.participants} participants
-                    </p>
-                    <Link
-                      to={`/challenges/${ch._id}`}
-                      className="btn btn-sm btn-primary mt-2"
-                    >
-                      Details
-                    </Link>
+      <section className="py-20 bg-white">
+        <div className="max-w-screen-2xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              🎯 Featured Challenges
+            </h2>
+            <p className="text-xl text-gray-600">
+              Join popular challenges and start making an impact today
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+            {activeChallenges.length === 0
+              ? [...Array(4)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="h-64 bg-gray-200 animate-pulse rounded-xl"
+                  />
+                ))
+              : activeChallenges.slice(0, 4).map((ch) => (
+                  <div
+                    key={ch._id}
+                    className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2 overflow-hidden flex flex-col h-full"
+                  >
+                    <div className="relative h-48 overflow-hidden flex-shrink-0">
+                      <img
+                        src={ch.imageUrl}
+                        alt={ch.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
+                      {/* Date/Duration Badge */}
+                      <div className="absolute top-4 left-4">
+                        <div className="bg-amber-500 text-white px-3 py-2 rounded-lg font-bold text-center min-w-[60px]">
+                          <div className="text-2xl">{ch.duration}</div>
+                          <div className="text-xs">DAYS</div>
+                        </div>
+                      </div>
+                      {/* Category Badge */}
+                      <div className="absolute top-4 right-4">
+                        <span className="bg-eco-primary text-white px-3 py-1 rounded-full text-sm font-semibold">
+                          {ch.category}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="p-6 flex-1 flex flex-col min-h-[200px]">
+                      <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 min-h-[56px]">
+                        {ch.title}
+                      </h3>
+                      <p className="text-sm text-gray-600 mb-2 flex items-center gap-2">
+                        <span>📍 {ch.impactMetric}</span>
+                      </p>
+                      <p className="text-sm text-gray-500 mb-4 flex items-center gap-2">
+                        <span>👥 {ch.participants} participants</span>
+                      </p>
+                      {/* Spacer to push buttons to bottom */}
+                      <div className="flex-grow"></div>
+                      <div className="flex gap-2 mt-auto">
+                        <Link
+                          to={`/challenges/${ch._id}`}
+                          className="flex-1 text-center bg-white hover:bg-gray-50 text-eco-primary border-2 border-eco-primary font-semibold py-2.5 px-4 rounded-lg transition-all text-sm"
+                        >
+                          Details
+                        </Link>
+                        <Link
+                          to={`/challenges/${ch._id}`}
+                          className="flex-1 text-center bg-eco-success hover:bg-eco-primary-dark text-white font-bold py-2.5 px-4 rounded-lg transition-all shadow-md hover:shadow-lg text-sm"
+                          style={{ color: "#ffffff" }}
+                        >
+                          Join
+                        </Link>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Link
+              to="/challenges"
+              className="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-eco-primary border-2 border-eco-primary font-semibold px-8 py-3 rounded-lg transition-all"
+            >
+              View All Challenges →
+            </Link>
+          </div>
         </div>
       </section>
 
+      {/* Why Go Green */}
+      <WhyGoGreenSection />
+
+      {/* Stats Section */}
+      <StatsSection stats={stats} />
+
+      {/* Top Eco-Warriors */}
+      <TopEcoWarriorsSection />
+
       {/* Recent Tips */}
-      <section className="max-w-7xl mx-auto px-4 py-12">
-        <h2 className="text-3xl font-bold mb-6">Recent Tips</h2>
-        <ul className="space-y-4">
-          {recentTips.length === 0
-            ? [...Array(3)].map((_, i) => (
-                <li
-                  key={i}
-                  className="h-20 bg-base-200 animate-pulse rounded"
-                />
-              ))
-            : recentTips.map((tip) => (
-                <li key={tip._id} className="bg-base-200 p-4 rounded shadow">
-                  <h3 className="font-semibold">{tip.title}</h3>
-                  <p className="text-sm text-base-content">
-                    By {tip.authorName} • {tip.upvotes} upvotes •{" "}
-                    {new Date(tip.createdAt).toLocaleDateString()}
-                  </p>
-                </li>
-              ))}
-        </ul>
+      <section className="py-20 bg-white">
+        <div className="max-w-screen-2xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              💡 Latest Eco Tips
+            </h2>
+            <p className="text-xl text-gray-600">
+              Learn from our community's best sustainable practices
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {recentTips.length === 0
+              ? [...Array(6)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="h-48 bg-gray-200 animate-pulse rounded-xl"
+                  />
+                ))
+              : recentTips.slice(0, 6).map((tip) => (
+                  <div
+                    key={tip._id}
+                    className="bg-gray-50 rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                  >
+                    {/* Icon */}
+                    <div className="text-4xl mb-4">
+                      {tip.category === "Energy" && "⚡"}
+                      {tip.category === "Water" && "💧"}
+                      {tip.category === "Waste" && "♻️"}
+                      {tip.category === "Transport" && "🚴"}
+                      {tip.category === "Food" && "🍃"}
+                      {!tip.category && "💡"}
+                    </div>
+
+                    <h3 className="font-bold text-lg text-gray-900 mb-2 line-clamp-2">
+                      {tip.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-3">
+                      By {tip.authorName} •{" "}
+                      {new Date(tip.createdAt).toLocaleDateString()}
+                    </p>
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-1 text-eco-primary">
+                        <span>👍</span>
+                        <span className="font-semibold">{tip.upvotes}</span>
+                      </div>
+                      {tip.category && (
+                        <span className="px-2 py-1 bg-eco-sand text-eco-primary text-xs rounded-full font-medium">
+                          {tip.category}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Link
+              to="/tips"
+              className="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-eco-primary border-2 border-eco-primary font-semibold px-8 py-3 rounded-lg transition-all"
+            >
+              Browse All Tips →
+            </Link>
+          </div>
+        </div>
       </section>
 
       {/* Upcoming Events */}
-      <section className="max-w-7xl mx-auto px-4 py-12">
-        <h2 className="text-3xl font-bold mb-6">Upcoming Events</h2>
-        <div className="grid md:grid-cols-2 gap-6">
-          {upcomingEvents.length === 0
-            ? [...Array(2)].map((_, i) => (
-                <div
-                  key={i}
-                  className="h-40 bg-base-200 animate-pulse rounded"
-                />
-              ))
-            : upcomingEvents.map((event) => (
-                <div key={event._id} className="bg-base-200 p-6 rounded shadow">
-                  <h3 className="text-xl font-semibold">{event.title}</h3>
-                  <p className="text-sm text-base-content">
-                    {new Date(event.date).toLocaleDateString()} •{" "}
-                    {event.location}
-                  </p>
-                  <p className="mt-2">{event.description}</p>
-                </div>
-              ))}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-screen-2xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              📅 Upcoming Events
+            </h2>
+            <p className="text-xl text-gray-600">
+              Join community events and make connections
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {upcomingEvents.length === 0
+              ? [...Array(2)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="h-48 bg-gray-200 animate-pulse rounded-xl"
+                  />
+                ))
+              : upcomingEvents.slice(0, 4).map((event) => (
+                  <div
+                    key={event._id}
+                    className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300"
+                  >
+                    <div className="flex gap-4">
+                      {/* Date Badge */}
+                      <div className="bg-eco-primary text-white rounded-lg p-4 text-center min-w-[80px] h-fit">
+                        <div className="text-3xl font-bold">
+                          {new Date(event.date).getDate()}
+                        </div>
+                        <div className="text-sm">
+                          {new Date(event.date).toLocaleDateString("en-US", {
+                            month: "short",
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Event Details */}
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">
+                          {event.title}
+                        </h3>
+                        <p className="text-sm text-gray-600 mb-2 flex items-center gap-2">
+                          <span>📍</span>
+                          <span>{event.location}</span>
+                        </p>
+                        <p className="text-gray-700 text-sm line-clamp-2 mb-3">
+                          {event.description}
+                        </p>
+                        <button className="text-eco-primary hover:text-eco-primary-dark font-semibold text-sm">
+                          Learn More →
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Link
+              to="/events"
+              className="inline-flex items-center gap-2 bg-white hover:bg-gray-50 text-eco-primary border-2 border-eco-primary font-semibold px-8 py-3 rounded-lg transition-all"
+            >
+              View All Events →
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* Static: Why Go Green */}
-      <section className="bg-base-200 py-12">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-4">Why Go Green?</h2>
-          <ul className="list-disc list-inside space-y-2 text-base-content">
-            <li>Reduce your carbon footprint</li>
-            <li>Protect natural resources</li>
-            <li>Improve community health</li>
-            <li>Save money through sustainable habits</li>
-            <li>Inspire others to take action</li>
-          </ul>
-        </div>
-      </section>
+      {/* Testimonials */}
+      <TestimonialsCarousel />
 
-      {/* Static: How It Works */}
-      <section className="py-12 text-center">
-        <h2 className="text-3xl font-bold mb-6">How It Works</h2>
-        <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto px-4">
-          <div className="bg-base-200 p-6 rounded shadow">
-            <h3 className="text-xl font-semibold mb-2">1. Join a Challenge</h3>
-            <p>Pick a challenge that fits your lifestyle and goals.</p>
-          </div>
-          <div className="bg-base-200 p-6 rounded shadow">
-            <h3 className="text-xl font-semibold mb-2">2. Track Progress</h3>
-            <p>Log your eco-friendly actions and see your impact grow.</p>
-          </div>
-          <div className="bg-base-200 p-6 rounded shadow">
-            <h3 className="text-xl font-semibold mb-2">3. Share Tips</h3>
-            <p>Help others by sharing your best sustainability hacks.</p>
-          </div>
-        </div>
-      </section>
+      {/* How It Works */}
+      <HowItWorksSection />
     </div>
   )
 }

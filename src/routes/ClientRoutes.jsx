@@ -14,16 +14,16 @@ import ForgotPassword from "../pages/Auth/ForgotPassword"
 import Login from "../pages/Auth/Login"
 import Register from "../pages/Auth/Register"
 
+import ChallengesList from "../Challenges/ChallengesList"
+import EditChallenge from "../Challenges/EditChallenge"
 import AddEvents from "../events/AddEvents"
 import Events from "../events/Events"
 import About from "../pages/About"
 import Contact from "../pages/Contact"
-import NotFound from "../pages/Error/NotFound"
+import Dashboard from "../pages/Dashboard"
+import NotFound from "../pages/NotFound"
 import AddTips from "../tips/AddTips"
 import Tips from "../tips/Tips"
-import Dashboard from "../pages/Dashboard"
-import ChallengesList from "../Challenges/ChallengesList"
-import EditChallenge from "../Challenges/EditChallenge";
 
 export const router = createBrowserRouter([
   {

@@ -1,8 +1,7 @@
+import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
-import axios from "../api/axios"
-import EventCard from "../components/EventCard"
-import SkeletonCard from "../components/SkeletonCard"
 import { toast } from "react-toastify"
+import axios from "../api/axios"
 
 export default function Events() {
   const [events, setEvents] = useState([])
@@ -25,16 +24,136 @@ export default function Events() {
     fetchEvents()
   }, [])
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, x: -30 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.5 },
+    },
+  }
+
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10">
-      <h2 className="text-3xl font-bold mb-6">Upcoming Events</h2>
-      <div className="grid gap-6">
+    <div className="min-h-screen bg-gradient-to-br from-eco-sand via-white to-eco-cream">
+      {/* Hero Header */}
+      <div className="bg-gradient-to-r from-eco-primary-dark to-eco-primary text-white py-20">
+        <div className="max-w-screen-2xl mx-auto px-4 text-center">
+          <motion.h1
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-5xl md:text-6xl font-bold mb-4"
+          >
+            📅 Upcoming Green Events
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-xl text-eco-cream max-w-2xl mx-auto"
+          >
+            Join our community events and connect with fellow eco-warriors
+          </motion.p>
+        </div>
+      </div>
+
+      {/* Events Timeline */}
+      <div className="max-w-4xl mx-auto px-4 py-16">
         {loading ? (
-          [...Array(3)].map((_, i) => <SkeletonCard key={i} />)
+          <div className="space-y-8">
+            {[...Array(3)].map((_, i) => (
+              <div
+                key={i}
+                className="h-48 bg-gray-200 animate-pulse rounded-eco"
+              />
+            ))}
+          </div>
         ) : events.length === 0 ? (
-          <p>No events available.</p>
+          <div className="text-center py-20">
+            <div className="text-6xl mb-4">📅</div>
+            <p className="text-2xl text-gray-500 mb-2">No upcoming events</p>
+            <p className="text-gray-400">Check back soon for new events!</p>
+          </div>
         ) : (
-          events.map((event) => <EventCard key={event._id} event={event} />)
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="relative"
+          >
+            {/* Timeline Line */}
+            <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-1 bg-eco-accent transform md:-translate-x-1/2" />
+
+            {events.map((event, index) => (
+              <motion.div
+                key={event._id}
+                variants={itemVariants}
+                className={`relative mb-12 ${
+                  index % 2 === 0 ? "md:text-right" : ""
+                }`}
+              >
+                {/* Timeline Dot */}
+                <div className="absolute left-8 md:left-1/2 transform -translate-x-1/2 w-6 h-6 bg-eco-primary rounded-full border-4 border-white shadow-eco z-10" />
+
+                <div
+                  className={`ml-20 md:ml-0 md:w-5/12 ${
+                    index % 2 === 0 ? "md:mr-auto" : "md:ml-auto"
+                  }`}
+                >
+                  <motion.div
+                    whileHover={{ scale: 1.02, y: -4 }}
+                    className="bg-white rounded-eco p-6 shadow-eco hover:shadow-eco-lg transition-all"
+                  >
+                    {/* Date Badge */}
+                    <div className="inline-flex items-center gap-2 bg-eco-primary text-white px-4 py-2 rounded-full mb-4 font-semibold text-sm">
+                      <span>📅</span>
+                      <span>
+                        {new Date(event.date).toLocaleDateString("en-US", {
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
+                      </span>
+                    </div>
+
+                    <h3 className="text-2xl font-bold text-eco-primary-dark mb-3">
+                      {event.title}
+                    </h3>
+
+                    <p className="text-gray-600 mb-4">{event.description}</p>
+
+                    <div className="flex flex-wrap gap-4 text-sm">
+                      <div className="flex items-center gap-2 text-eco-primary">
+                        <span>📍</span>
+                        <span className="font-medium">{event.location}</span>
+                      </div>
+                      {event.attendees && (
+                        <div className="flex items-center gap-2 text-eco-primary">
+                          <span>👥</span>
+                          <span className="font-medium">
+                            {event.attendees} attending
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    <button className="mt-6 btn-eco w-full md:w-auto">
+                      Register Now →
+                    </button>
+                  </motion.div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
         )}
       </div>
     </div>

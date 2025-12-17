@@ -1,9 +1,10 @@
-import { useState, useContext } from "react"
+import { useContext, useState } from "react"
+import { FaClock, FaEdit, FaLeaf, FaTrash, FaUsers } from "react-icons/fa"
 import { useNavigate } from "react-router"
-import { AuthContext } from "../context/AuthContext"
-import axios from "../api/axios"
 import { toast } from "react-toastify"
 import Swal from "sweetalert2"
+import axios from "../api/axios"
+import { AuthContext } from "../context/AuthContext"
 
 export default function ChallengeCard({
   challenge,
@@ -52,52 +53,98 @@ export default function ChallengeCard({
   }
 
   return (
-    <div className="card bg-base-100 shadow-md p-6">
-      <img
-        src={challenge.imageUrl}
-        alt={challenge.title}
-        className="w-full h-40 object-cover rounded mb-4"
-      />
-      <h4 className="text-lg font-bold">{challenge.title}</h4>
-      <p className="text-sm text-gray-500">{challenge.category}</p>
-      <p>{challenge.description}</p>
-      <div className="text-sm text-gray-600 mt-2 space-y-1">
-        <p>Duration: {challenge.duration} days</p>
-        <p>Impact: {challenge.impactMetric}</p>
-        <p>Target: {challenge.target}</p>
-        <p>Participants: {challenge.participants}</p>
-        <p>
-          Dates: {challenge.startDate?.slice(0, 10)} →{" "}
-          {challenge.endDate?.slice(0, 10)}
-        </p>
+    <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col">
+      {/* Image */}
+      <div className="relative h-48 overflow-hidden">
+        <img
+          src={challenge.imageUrl}
+          alt={challenge.title}
+          className="w-full h-full object-cover"
+        />
+        {/* Category Badge */}
+        <div className="absolute top-4 left-4">
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-eco-primary text-white shadow-md">
+            {challenge.category}
+          </span>
+        </div>
+        {/* Duration Badge */}
+        <div className="absolute top-4 right-4">
+          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-amber-500 text-white shadow-md">
+            <FaClock className="text-xs" />
+            {challenge.duration} DAYS
+          </span>
+        </div>
       </div>
 
-      <button
-        onClick={handleJoin}
-        className={`btn btn-success mt-4 w-full ${
-          joining ? "btn-disabled" : ""
-        }`}
-        disabled={joining}
-      >
-        {joining ? "Joining..." : "Join Challenge"}
-      </button>
+      {/* Content - Grows to fill space */}
+      <div className="p-5 flex-1 flex flex-col min-h-[280px]">
+        {/* Title */}
+        <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 min-h-[56px]">
+          {challenge.title}
+        </h3>
 
-      {user?.email === challenge.createdBy && (
-        <div className="mt-4 flex gap-2">
-          <button
-            className="btn btn-sm btn-outline btn-warning"
-            onClick={handleEdit}
-          >
-            Edit
-          </button>
-          <button
-            className="btn btn-sm btn-outline btn-error"
-            onClick={handleDelete}
-          >
-            Delete
-          </button>
+        {/* Description */}
+        <p className="text-sm text-gray-600 mb-4 line-clamp-3 min-h-[60px]">
+          {challenge.description}
+        </p>
+
+        {/* Stats Row */}
+        <div className="flex items-center gap-4 mb-4 text-sm text-gray-700">
+          <div className="flex items-center gap-1">
+            <FaLeaf className="text-eco-primary" />
+            <span className="font-semibold text-gray-900">
+              {challenge.impactMetric}
+            </span>
+          </div>
+          <div className="flex items-center gap-1">
+            <FaUsers className="text-blue-500" />
+            <span className="font-semibold text-gray-900">
+              {challenge.participants || 0}
+            </span>
+          </div>
         </div>
-      )}
+
+        {/* Spacer to push button to bottom */}
+        <div className="flex-grow"></div>
+        <div className="mt-auto">
+          {/* Action Buttons */}
+          {user?.email === challenge.createdBy ? (
+            <div className="flex gap-2">
+              <button
+                onClick={handleEdit}
+                className="flex-1 inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-all"
+              >
+                <FaEdit />
+                Edit
+              </button>
+              <button
+                onClick={handleDelete}
+                className="flex-1 inline-flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-all"
+              >
+                <FaTrash />
+                Delete
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={handleJoin}
+              className={`w-full bg-eco-primary hover:bg-eco-primary-dark text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 hover:shadow-lg ${
+                joining ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              disabled={joining}
+            >
+              {joining ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="loading loading-spinner loading-sm"></span>
+                  Joining...
+                </span>
+              ) : (
+                "Join Challenge"
+              )}
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   )
 }
