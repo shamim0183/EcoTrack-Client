@@ -122,7 +122,7 @@ const Login = () => {
           transition={{ duration: 0.6 }}
           className="w-full max-w-md"
         >
-          <div className="bg-white rounded-2xl shadow-xl p-8">
+          <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
             {/* Mobile Logo */}
             <div className="lg:hidden flex items-center gap-2 justify-center mb-6">
               <FaLeaf className="text-3xl text-eco-primary" />

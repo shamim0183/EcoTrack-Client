@@ -186,13 +186,13 @@ const Navbar = () => {
             <div className="hidden lg:flex gap-2">
               <MyLink
                 to="/login"
-                className="px-5 py-2.5 border-2 border-eco-primary text-gray-900 hover:bg-eco-primary hover:text-white font-semibold rounded-lg transition-all"
+                className="px-5 py-2.5 border-2 border-eco-primary font-semibold rounded-lg transition-all"
               >
                 Login
               </MyLink>
               <MyLink
                 to="/register"
-                className="px-5 py-2.5 bg-eco-success hover:bg-eco-primary-dark text-white font-bold rounded-lg transition-all shadow-md hover:shadow-lg"
+                className="px-5 py-2.5 border-2 border-eco-primary font-bold rounded-lg transition-all shadow-md hover:shadow-lg"
               >
                 Register
               </MyLink>
