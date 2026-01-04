@@ -259,7 +259,7 @@ const Login = () => {
                 type="button"
                 onClick={() => {
                   emailRef.current.value = "as@as.com"
-                  setPassword("123456")
+                  setPassword("As@123")
                   setIsValidPassword(false) // Will bypass validation on submit
                 }}
                 className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-all shadow-md hover:shadow-lg"

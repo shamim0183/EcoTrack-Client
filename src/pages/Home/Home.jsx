@@ -21,7 +21,7 @@ export default function Home() {
       try {
         const [featuredRes, statsRes, activeRes, tipsRes, eventsRes] =
           await Promise.all([
-            axios.get("/challenges"),
+            axios.get("/challenges?limit=4"),
             axios.get("/stats"),
             axios.get("/challenges"),
             axios.get("/tips/recent"),
