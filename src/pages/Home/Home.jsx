@@ -18,22 +18,37 @@ export default function Home() {
 
   useEffect(() => {
     const fetchData = async () => {
+      // Fetch challenges
       try {
-        const [featuredRes, statsRes, activeRes, tipsRes, eventsRes] =
-          await Promise.all([
-            axios.get("/challenges?limit=4"),
-            axios.get("/stats"),
-            axios.get("/challenges"),
-            axios.get("/tips/recent"),
-            axios.get("/events"),
-          ])
-        setFeaturedChallenges(featuredRes.data)
-        setStats(statsRes.data)
-        setActiveChallenges(activeRes.data)
-        setRecentTips(tipsRes.data)
-        setUpcomingEvents(eventsRes.data)
+        const res = await axios.get("/challenges?limit=4")
+        setFeaturedChallenges(res.data)
+        setActiveChallenges(res.data)
       } catch (err) {
-        console.error("Home page fetch error:", err)
+        console.error("Challenges fetch error:", err)
+      }
+
+      // Fetch stats
+      try {
+        const res = await axios.get("/stats")
+        setStats(res.data)
+      } catch (err) {
+        console.error("Stats fetch error:", err)
+      }
+
+      // Fetch tips (may fail - that's OK)
+      try {
+        const res = await axios.get("/tips/recent")
+        setRecentTips(res.data)
+      } catch (err) {
+        console.error("Tips fetch error (skipping):", err)
+      }
+
+      // Fetch events
+      try {
+        const res = await axios.get("/events")
+        setUpcomingEvents(res.data)
+      } catch (err) {
+        console.error("Events fetch error:", err)
       }
     }
     fetchData()
