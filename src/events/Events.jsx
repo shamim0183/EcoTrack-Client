@@ -199,7 +199,7 @@ export default function Events() {
                     </div>
 
                     {/* Conditional Buttons */}
-                    {user?.email === event.organizer ? (
+                    {user?.email === event.organizer && (
                       // Admin Edit/Delete
                       <div className="mt-6 flex gap-2">
                         <button
@@ -217,26 +217,6 @@ export default function Events() {
                           Delete
                         </button>
                       </div>
-                    ) : (
-                      // Register Button for users
-                      <button
-                        onClick={() => handleRegister(event._id)}
-                        disabled={registering === event._id}
-                        className={`mt-6 btn-eco w-full md:w-auto cursor-pointer ${
-                          registering === event._id
-                            ? "opacity-70 cursor-not-allowed"
-                            : ""
-                        }`}
-                      >
-                        {registering === event._id ? (
-                          <span className="flex items-center gap-2">
-                            <span className="loading loading-spinner loading-sm"></span>
-                            Registering...
-                          </span>
-                        ) : (
-                          "Register Now →"
-                        )}
-                      </button>
                     )}
                   </motion.div>
                 </div>
