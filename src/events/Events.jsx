@@ -163,7 +163,7 @@ export default function Events() {
                 >
                   <motion.div
                     whileHover={{ scale: 1.02, y: -4 }}
-                    className="bg-white rounded-eco p-6 shadow-eco hover:shadow-eco-lg transition-all cursor-pointer"
+                    className="bg-white rounded-eco p-6 shadow-eco hover:shadow-eco-lg transition-all"
                   >
                     {/* Date Badge */}
                     <div className="inline-flex items-center gap-2 bg-eco-primary text-white px-4 py-2 rounded-full mb-4 font-semibold text-sm">
@@ -222,7 +222,7 @@ export default function Events() {
                       <button
                         onClick={() => handleRegister(event._id)}
                         disabled={registering === event._id}
-                        className={`mt-6 btn-eco w-full md:w-auto ${
+                        className={`mt-6 btn-eco w-full md:w-auto cursor-pointer ${
                           registering === event._id
                             ? "opacity-70 cursor-not-allowed"
                             : ""
