@@ -99,7 +99,7 @@ export default function ChallengeCard({
           <div className="flex items-center gap-1">
             <FaUsers className="text-blue-500" />
             <span className="font-semibold text-gray-900">
-              {challenge.participants || 0}
+              {challenge.participantCount || challenge.participants || 0}
             </span>
           </div>
         </div>

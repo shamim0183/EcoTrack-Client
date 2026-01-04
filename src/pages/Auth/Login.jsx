@@ -243,6 +243,31 @@ const Login = () => {
                 Login with Google
               </button>
 
+              {/* Demo Account Button */}
+              <div className="relative my-4">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-4 bg-white text-gray-500">
+                    Quick Demo
+                  </span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  emailRef.current.value = "as@as.com"
+                  setPassword("123456")
+                  setIsValidPassword(false) // Will bypass validation on submit
+                }}
+                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-all shadow-md hover:shadow-lg"
+              >
+                <span>🚀</span>
+                Try Demo Account
+              </button>
+
               {error && (
                 <p className="text-red-500 text-sm text-center">{error}</p>
               )}

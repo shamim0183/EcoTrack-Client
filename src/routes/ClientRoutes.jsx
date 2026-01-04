@@ -17,12 +17,15 @@ import Register from "../pages/Auth/Register"
 import ChallengesList from "../Challenges/ChallengesList"
 import EditChallenge from "../Challenges/EditChallenge"
 import AddEvents from "../events/AddEvents"
+import EditEvent from "../events/EditEvent"
 import Events from "../events/Events"
 import About from "../pages/About"
 import Contact from "../pages/Contact"
 import Dashboard from "../pages/Dashboard"
 import NotFound from "../pages/NotFound"
+import ProfilePage from "../pages/ProfilePage"
 import AddTips from "../tips/AddTips"
+import EditTip from "../tips/EditTip"
 import Tips from "../tips/Tips"
 
 export const router = createBrowserRouter([
@@ -85,7 +88,31 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+      {
+        path: "tip/edit/:id",
+        element: (
+          <PrivateRoute>
+            <EditTip />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "event/edit/:id",
+        element: (
+          <PrivateRoute>
+            <EditEvent />
+          </PrivateRoute>
+        ),
+      },
       { path: "dashboard", element: <Dashboard /> },
+      {
+        path: "profile",
+        element: (
+          <PrivateRoute>
+            <ProfilePage />
+          </PrivateRoute>
+        ),
+      },
     ],
   },
   { path: "*", element: <NotFound /> },

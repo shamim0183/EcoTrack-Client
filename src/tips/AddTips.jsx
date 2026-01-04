@@ -111,10 +111,11 @@ export default function AddTips() {
                   required
                 >
                   <option value="">Select a category...</option>
-                  <option>Waste Management</option>
                   <option>Energy Conservation</option>
                   <option>Water Conservation</option>
+                  <option>Sustainable Transport</option>
                   <option>Green Living</option>
+                  <option>Waste Reduction</option>
                 </select>
               </div>
 

@@ -1,7 +1,7 @@
 import axios from "axios"
 
 export default axios.create({
-  baseURL: "https://eco-track-server-eight.vercel.app/api", // ✅ matches your Express server
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5001/api", // Use env variable or fallback to local
   headers: {
     "Content-Type": "application/json",
   },

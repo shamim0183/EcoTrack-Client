@@ -9,10 +9,10 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth"
-import { Bounce, toast } from "react-toastify"
-import { auth } from "../services/firebaseConfig"
-import axios from "../api/axios"
 import { useEffect, useState } from "react"
+import { Bounce, toast } from "react-toastify"
+import axios from "../api/axios"
+import { auth } from "../services/firebaseConfig"
 
 const googleProvider = new GoogleAuthProvider()
 const githubProvider = new GithubAuthProvider()
@@ -21,19 +21,37 @@ const useAuth = () => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [userRole, setUserRole] = useState(null)
 
   const getToken = async () => {
     if (!auth.currentUser) return null
     return await auth.currentUser.getIdToken()
   }
 
+  // Fetch user role from backend
+  const fetchUserRole = async (email) => {
+    try {
+      const response = await axios.get(`/users/profile/${email}`)
+      setUserRole(response.data.role || "user")
+    } catch (err) {
+      console.error("Failed to fetch user role:", err)
+      setUserRole("user") // Default to user if fetch fails
+    }
+  }
+
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser)
       setLoading(false)
+
+      // Fetch role from backend if user is logged in
+      if (currentUser?.email) {
+        await fetchUserRole(currentUser.email)
+      } else {
+        setUserRole(null)
+      }
     })
 
-   
     const attachToken = async (config) => {
       const token = await getToken()
       if (token) {
@@ -84,6 +102,9 @@ const useAuth = () => {
       photoURL: result.user.photoURL,
       provider: result.user.providerData?.[0]?.providerId,
     })
+
+    // Fetch role after login
+    await fetchUserRole(result.user.email)
   }
 
   const register = async (email, password, name, photoURL) => {
@@ -101,16 +122,39 @@ const useAuth = () => {
       photoURL,
       provider: "password",
     })
+
+    // Fetch role after registration
+    await fetchUserRole(email)
   }
 
   const googleLogin = async () => {
     const result = await signInWithPopup(auth, googleProvider)
     setUser(result.user)
+
+    await axios.post("/users/sync", {
+      email: result.user.email,
+      name: result.user.displayName,
+      photoURL: result.user.photoURL,
+      provider: result.user.providerData?.[0]?.providerId,
+    })
+
+    // Fetch role after Google login
+    await fetchUserRole(result.user.email)
   }
 
   const githubLogin = async () => {
     const result = await signInWithPopup(auth, githubProvider)
     setUser(result.user)
+
+    await axios.post("/users/sync", {
+      email: result.user.email,
+      name: result.user.displayName,
+      photoURL: result.user.photoURL,
+      provider: result.user.providerData?.[0]?.providerId,
+    })
+
+    // Fetch role after GitHub login
+    await fetchUserRole(result.user.email)
   }
 
   const resetPassword = async (email) => {
@@ -120,6 +164,41 @@ const useAuth = () => {
       autoClose: 3000,
       transition: Bounce,
     })
+  }
+
+  const updateUserProfile = async (name, photoURL) => {
+    try {
+      // Update Firebase Auth profile
+      await updateProfile(auth.currentUser, {
+        displayName: name,
+        photoURL: photoURL,
+      })
+
+      // Reload to get fresh data
+      await auth.currentUser.reload()
+      setUser(auth.currentUser)
+
+      // Update backend database - URL encode the email to handle @ symbol
+      await axios.patch(
+        `/users/profile/${encodeURIComponent(auth.currentUser.email)}`,
+        {
+          name,
+          photoURL,
+        }
+      )
+
+      toast.success("Profile updated successfully!", {
+        position: "top-right",
+        autoClose: 2000,
+        transition: Bounce,
+      })
+
+      return { success: true }
+    } catch (err) {
+      console.error("Profile update error:", err)
+      toast.error("Failed to update profile. Please try again.")
+      return { success: false, error: err.message }
+    }
   }
 
   const logout = async () => {
@@ -135,6 +214,9 @@ const useAuth = () => {
   return {
     user,
     setUser,
+    userRole,
+    refreshUserRole: () => fetchUserRole(user?.email), // Allow manual role refresh
+    updateUserProfile, // Add profile update function
     login,
     register,
     googleLogin,

@@ -5,7 +5,7 @@ import { AuthContext } from "../context/AuthContext"
 import MyLink from "./MyLink"
 
 const Navbar = () => {
-  const { user, logout, loading } = useContext(AuthContext)
+  const { user, logout, loading, userRole } = useContext(AuthContext)
   const [showDropdown, setShowDropdown] = useState(false)
   const navigate = useNavigate()
 
@@ -21,7 +21,15 @@ const Navbar = () => {
     { label: "Events", to: "/events" },
   ]
 
-  const protectedLinks = [{ label: "Add Challenge", to: "/challenge/add" }]
+  // Admin-only links - only show to admin users
+  const adminLinks =
+    userRole === "admin"
+      ? [
+          { label: "Add Challenge", to: "/challenge/add" },
+          { label: "Add Tip", to: "/tip/add" },
+          { label: "Add Event", to: "/event/add" },
+        ]
+      : []
 
   const dropdownLinks = [{ label: "My Activities", to: "/my-activities" }]
 
@@ -71,6 +79,31 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
+                  {/* Role Badge in Mobile Menu */}
+                  {userRole && (
+                    <li className="px-2 py-2">
+                      <span
+                        className={`
+                        px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wide
+                        flex items-center justify-center gap-1.5 shadow-sm
+                        ${
+                          userRole === "admin"
+                            ? "bg-gradient-to-r from-green-500 to-eco-success text-white"
+                            : "bg-gradient-to-r from-blue-500 to-blue-600 text-white"
+                        }
+                      `}
+                      >
+                        {userRole === "admin" ? "👑" : "👤"}
+                        <span>{userRole}</span>
+                      </span>
+                    </li>
+                  )}
+                  {/* Navigation Links */}
+                  <li>
+                    <MyLink to="/profile" className="block">
+                      My Profile
+                    </MyLink>
+                  </li>
                   {dropdownLinks.map(({ label, to }) => (
                     <li key={label}>
                       <MyLink to={to}>{label}</MyLink>
@@ -79,7 +112,7 @@ const Navbar = () => {
                   <li>
                     <button
                       onClick={handleLogout}
-                      className="text-gray-700 hover:bg-eco-primary hover:text-white font-medium w-full text-left rounded-lg transition-all px-4 py-2"
+                      className="text-gray-700 hover:bg-green-50 hover:text-eco-primary font-medium w-full text-left rounded-lg transition-all px-4 py-2"
                     >
                       Logout
                     </button>
@@ -107,7 +140,7 @@ const Navbar = () => {
               </li>
             ))}
             {user &&
-              protectedLinks.map(({ label, to }) => (
+              adminLinks.map(({ label, to }) => (
                 <li key={label}>
                   <MyLink to={to}>{label}</MyLink>
                 </li>
@@ -149,7 +182,7 @@ const Navbar = () => {
             <div className="relative hidden lg:block">
               <button
                 onClick={() => setShowDropdown((prev) => !prev)}
-                className="flex items-center gap-2"
+                className="flex items-center"
               >
                 <img
                   src={
@@ -163,7 +196,44 @@ const Navbar = () => {
               </button>
 
               {showDropdown && (
-                <ul className="absolute right-0 mt-3 w-48 bg-white shadow-lg rounded-box z-[100] p-2 space-y-2 border border-gray-200">
+                <ul className="absolute right-0 mt-3 w-64 bg-white shadow-lg rounded-box z-[100] p-2 py-3 space-y-1 border border-gray-200">
+                  {/* User Info - Name, Email, Role */}
+                  <li className="px-4 py-3 border-b border-gray-200">
+                    <p className="font-semibold text-gray-800 truncate">
+                      {user.displayName || "User"}
+                    </p>
+                    <p className="text-xs text-gray-500 truncate">
+                      {user.email}
+                    </p>
+                    {/* Role Badge */}
+                    {userRole && (
+                      <div className="mt-2">
+                        <span
+                          className={`
+                          px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide
+                          inline-flex items-center gap-1.5 shadow-sm
+                          ${
+                            userRole === "admin"
+                              ? "bg-gradient-to-r from-green-500 to-eco-success text-white"
+                              : "bg-gradient-to-r from-blue-500 to-blue-600 text-white"
+                          }
+                        `}
+                        >
+                          {userRole === "admin" ? "👑" : "👤"}
+                          <span>{userRole}</span>
+                        </span>
+                      </div>
+                    )}
+                  </li>
+
+                  {/* My Profile Link */}
+                  <li>
+                    <MyLink to="/profile" className="block">
+                      My Profile
+                    </MyLink>
+                  </li>
+
+                  {/* Other Navigation Links */}
                   {dropdownLinks.map(({ label, to }) => (
                     <li key={label}>
                       <MyLink to={to} className="block">
@@ -174,7 +244,7 @@ const Navbar = () => {
                   <li>
                     <button
                       onClick={handleLogout}
-                      className="block w-full text-left text-gray-700 hover:bg-eco-primary hover:text-white rounded-lg transition-all font-medium px-4 py-2"
+                      className="block w-full text-left text-gray-700 hover:bg-green-50 hover:text-eco-primary rounded-lg transition-all font-medium px-4 py-2"
                     >
                       Logout
                     </button>

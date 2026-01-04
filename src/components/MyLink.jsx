@@ -8,7 +8,7 @@ const MyLink = ({ to, children, className = "", ...props }) => {
         `${className} ${
           isActive
             ? "bg-eco-primary text-white font-semibold"
-            : "text-gray-700 hover:bg-eco-primary hover:text-white"
+            : "text-gray-800 hover:bg-green-100 hover:text-eco-success font-medium"
         } px-4 py-2 rounded-lg transition-all duration-300`
       }
       {...props}

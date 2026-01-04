@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react"
 import { useParams } from "react-router"
-import axios from "../../api/axios"
 import { toast } from "react-toastify"
-import { AuthContext } from "../../context/AuthContext"
+import axios from "../../api/axios"
 import SkeletonCard from "../../components/SkeletonCard"
+import { AuthContext } from "../../context/AuthContext"
 
 export default function ActivityDetail() {
   const { user } = useContext(AuthContext)
@@ -23,7 +23,7 @@ export default function ActivityDetail() {
     const fetchActivity = async () => {
       try {
         setLoading(true)
-        const res = await axios.get("/dashboard") 
+        const res = await axios.get("/dashboard")
         setData(res.data)
       } catch (err) {
         toast.error("Failed to load activity")
@@ -82,9 +82,21 @@ export default function ActivityDetail() {
                 </p>
                 <p>{entry.challenge.description}</p>
                 <div className="mt-4 space-y-2">
-                  <label className="block text-sm font-medium">Status</label>
+                  <label className="block text-sm font-semibold text-gray-700">
+                    Status
+                  </label>
                   <select
-                    className="select select-bordered w-full"
+                    className="w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-lg shadow-sm 
+                    transition-all duration-200 ease-in-out
+                    hover:border-eco-primary hover:shadow-md
+                    focus:outline-none focus:ring-2 focus:ring-eco-primary focus:border-eco-primary
+                    cursor-pointer text-gray-700 font-medium
+                    appearance-none bg-no-repeat bg-right pr-10"
+                    style={{
+                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234CAF50'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+                      backgroundSize: "1.5em 1.5em",
+                      backgroundPosition: "right 0.5rem center",
+                    }}
                     value={entry.status}
                     onChange={(e) =>
                       handleUpdate(entry.userChallengeId, {
@@ -92,32 +104,133 @@ export default function ActivityDetail() {
                       })
                     }
                   >
-                    <option>Not Started</option>
-                    <option>Ongoing</option>
-                    <option>Finished</option>
+                    <option
+                      value="Not Started"
+                      className="py-2 px-4 hover:bg-gray-100"
+                    >
+                      🔵 Not Started
+                    </option>
+                    <option
+                      value="Ongoing"
+                      className="py-2 px-4 hover:bg-blue-50"
+                    >
+                      🟢 Ongoing
+                    </option>
+                    <option
+                      value="Finished"
+                      className="py-2 px-4 hover:bg-green-50"
+                    >
+                      ✅ Finished
+                    </option>
                   </select>
 
-                  <label className="block text-sm font-medium mt-2">
-                    Progress: {entry.progress}%
-                  </label>
-                  <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={entry.progress}
-                    onChange={(e) =>
-                      handleUpdate(entry.userChallengeId, {
-                        progress: parseInt(e.target.value),
-                      })
-                    }
-                    className="range range-success"
-                  />
+                  {/* Progress Section */}
+                  <div className="mt-6 space-y-3">
+                    <div className="flex justify-between items-center">
+                      <label className="text-sm font-semibold text-gray-700">
+                        Challenge Progress
+                      </label>
+                      <span className="text-2xl font-bold text-eco-primary">
+                        {entry.progress}%
+                      </span>
+                    </div>
+
+                    {/* Custom Range Slider */}
+                    <div className="relative">
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={entry.progress}
+                        onChange={(e) =>
+                          handleUpdate(entry.userChallengeId, {
+                            progress: parseInt(e.target.value),
+                          })
+                        }
+                        className="w-full h-3 bg-gray-200 rounded-full appearance-none cursor-pointer
+                        transition-all duration-300 ease-in-out
+                        hover:bg-gray-300
+                        focus:outline-none focus:ring-2 focus:ring-eco-primary focus:ring-offset-2"
+                        style={{
+                          background: `linear-gradient(to right, 
+                            #10b981 0%, 
+                            #10b981 ${entry.progress}%, 
+                            #e5e7eb ${entry.progress}%, 
+                            #e5e7eb 100%)`,
+                        }}
+                      />
+                    </div>
+
+                    {/* Animated Progress Bar */}
+                    <div className="relative h-4 bg-gray-200 rounded-full overflow-hidden shadow-inner">
+                      <div
+                        className="h-full rounded-full transition-all duration-500 ease-out
+                        bg-gradient-to-r from-eco-primary via-green-500 to-eco-success
+                        shadow-lg relative overflow-hidden"
+                        style={{ width: `${entry.progress}%` }}
+                      >
+                        {/* Animated shine effect */}
+                        <div
+                          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent 
+                        animate-shimmer"
+                          style={{
+                            backgroundSize: "200% 100%",
+                            animation: "shimmer 2s infinite",
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+
+                    {/* Progress Milestones */}
+                    <div className="flex justify-between text-xs text-gray-500 px-1">
+                      <span
+                        className={
+                          entry.progress >= 0
+                            ? "text-eco-primary font-semibold"
+                            : ""
+                        }
+                      >
+                        0%
+                      </span>
+                      <span
+                        className={
+                          entry.progress >= 25
+                            ? "text-eco-primary font-semibold"
+                            : ""
+                        }
+                      >
+                        25%
+                      </span>
+                      <span
+                        className={
+                          entry.progress >= 50
+                            ? "text-eco-primary font-semibold"
+                            : ""
+                        }
+                      >
+                        50%
+                      </span>
+                      <span
+                        className={
+                          entry.progress >= 75
+                            ? "text-eco-primary font-semibold"
+                            : ""
+                        }
+                      >
+                        75%
+                      </span>
+                      <span
+                        className={
+                          entry.progress >= 100
+                            ? "text-eco-success font-bold"
+                            : ""
+                        }
+                      >
+                        100%
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <progress
-                  className="progress progress-success w-full mt-2"
-                  value={entry.progress}
-                  max="100"
-                ></progress>
                 <div className="flex justify-between text-xs text-gray-400 mt-2">
                   <span>
                     Joined: {new Date(entry.joinDate).toLocaleDateString()}
@@ -133,8 +246,6 @@ export default function ActivityDetail() {
           </div>
         )}
       </section>
-
-
     </div>
   )
 }

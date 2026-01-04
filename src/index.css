@@ -130,6 +130,12 @@ h6 {
 /* Button Hover States */
 button:not(.btn-eco) {
   transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 /* Glass Button Hover */

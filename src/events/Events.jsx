@@ -1,9 +1,15 @@
 import { motion } from "framer-motion"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
+import { FaEdit, FaTrash } from "react-icons/fa"
+import { useNavigate } from "react-router"
 import { toast } from "react-toastify"
+import Swal from "sweetalert2"
 import axios from "../api/axios"
+import { AuthContext } from "../context/AuthContext"
 
 export default function Events() {
+  const { user } = useContext(AuthContext)
+  const navigate = useNavigate()
   const [events, setEvents] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -23,6 +29,47 @@ export default function Events() {
 
     fetchEvents()
   }, [])
+
+  const handleRegister = async (eventId) => {
+    if (!user?.email) {
+      navigate("/login")
+      return
+    }
+    try {
+      await axios.post("/events/register", { eventId, userEmail: user.email })
+      toast.success("Registered for event!")
+    } catch (err) {
+      toast.error("Failed to register")
+      console.error(err)
+    }
+  }
+
+  const handleEdit = (eventId) => {
+    navigate(`/event/edit/${eventId}`)
+  }
+
+  const handleDelete = async (eventId) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This event will be permanently deleted.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    })
+
+    if (!result.isConfirmed) return
+
+    try {
+      await axios.delete(`/events/${eventId}`)
+      toast.success("Event deleted")
+      setEvents((prev) => prev.filter((e) => e._id !== eventId))
+    } catch (err) {
+      toast.error("Failed to delete event")
+      console.error(err)
+    }
+  }
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -146,9 +193,34 @@ export default function Events() {
                       )}
                     </div>
 
-                    <button className="mt-6 btn-eco w-full md:w-auto">
-                      Register Now →
-                    </button>
+                    {/* Conditional Buttons */}
+                    {user?.email === event.organizer ? (
+                      // Admin Edit/Delete
+                      <div className="mt-6 flex gap-2">
+                        <button
+                          onClick={() => handleEdit(event._id)}
+                          className="flex-1 inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold py-3 px-4 rounded-lg transition"
+                        >
+                          <FaEdit />
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(event._id)}
+                          className="flex-1 inline-flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-4 rounded-lg transition"
+                        >
+                          <FaTrash />
+                          Delete
+                        </button>
+                      </div>
+                    ) : (
+                      // Register Button for users
+                      <button
+                        onClick={() => handleRegister(event._id)}
+                        className="mt-6 btn-eco w-full md:w-auto"
+                      >
+                        Register Now →
+                      </button>
+                    )}
                   </motion.div>
                 </div>
               </motion.div>
