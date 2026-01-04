@@ -158,7 +158,7 @@ export default function Events() {
                 >
                   <motion.div
                     whileHover={{ scale: 1.02, y: -4 }}
-                    className="bg-white rounded-eco p-6 shadow-eco hover:shadow-eco-lg transition-all"
+                    className="bg-white rounded-eco p-6 shadow-eco hover:shadow-eco-lg transition-all cursor-pointer"
                   >
                     {/* Date Badge */}
                     <div className="inline-flex items-center gap-2 bg-eco-primary text-white px-4 py-2 rounded-full mb-4 font-semibold text-sm">
