@@ -83,9 +83,10 @@ export default function Home() {
                   />
                 ))
               : activeChallenges.slice(0, 4).map((ch) => (
-                  <div
+                  <Link
                     key={ch._id}
-                    className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2 overflow-hidden flex flex-col h-full"
+                    to={`/challenges/${ch._id}`}
+                    className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2 overflow-hidden flex flex-col h-full cursor-pointer"
                   >
                     <div className="relative h-48 overflow-hidden flex-shrink-0">
                       <img
@@ -120,22 +121,12 @@ export default function Home() {
                       {/* Spacer to push buttons to bottom */}
                       <div className="flex-grow"></div>
                       <div className="flex gap-2 mt-auto">
-                        <Link
-                          to={`/challenges/${ch._id}`}
-                          className="flex-1 text-center bg-white hover:bg-gray-50 text-eco-primary border-2 border-eco-primary font-semibold py-2.5 px-4 rounded-lg transition-all text-sm"
-                        >
-                          Details
-                        </Link>
-                        <Link
-                          to={`/challenges/${ch._id}`}
-                          className="flex-1 text-center bg-eco-success hover:bg-eco-primary-dark text-white font-bold py-2.5 px-4 rounded-lg transition-all shadow-md hover:shadow-lg text-sm"
-                          style={{ color: "#ffffff" }}
-                        >
-                          Join
-                        </Link>
+                        <span className="flex-1 text-center bg-eco-primary hover:bg-eco-dark text-white font-semibold py-2.5 px-4 rounded-lg transition-all text-sm">
+                          View Details →
+                        </span>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 ))}
           </div>
 

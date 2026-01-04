@@ -52,8 +52,15 @@ export default function ChallengeCard({
     }
   }
 
+  const handleCardClick = () => {
+    navigate(`/challenges/${challenge._id}`)
+  }
+
   return (
-    <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col">
+    <div
+      onClick={handleCardClick}
+      className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col cursor-pointer"
+    >
       {/* Image */}
       <div className="relative h-48 overflow-hidden">
         <img
@@ -109,7 +116,7 @@ export default function ChallengeCard({
         <div className="mt-auto">
           {/* Action Buttons */}
           {user?.email === challenge.createdBy ? (
-            <div className="flex gap-2">
+            <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
               <button
                 onClick={handleEdit}
                 className="flex-1 inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-all"
@@ -127,7 +134,10 @@ export default function ChallengeCard({
             </div>
           ) : (
             <button
-              onClick={handleJoin}
+              onClick={(e) => {
+                e.stopPropagation()
+                handleJoin()
+              }}
               className={`w-full bg-eco-primary hover:bg-eco-primary-dark text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 hover:shadow-lg ${
                 joining ? "opacity-50 cursor-not-allowed" : ""
               }`}
