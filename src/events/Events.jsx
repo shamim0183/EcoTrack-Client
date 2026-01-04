@@ -12,6 +12,7 @@ export default function Events() {
   const navigate = useNavigate()
   const [events, setEvents] = useState([])
   const [loading, setLoading] = useState(true)
+  const [registering, setRegistering] = useState(null) // Track which event is being registered
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -35,12 +36,16 @@ export default function Events() {
       navigate("/login")
       return
     }
+
+    setRegistering(eventId)
     try {
       await axios.post("/events/register", { eventId, userEmail: user.email })
       toast.success("Registered for event!")
     } catch (err) {
       toast.error("Failed to register")
       console.error(err)
+    } finally {
+      setRegistering(null)
     }
   }
 
@@ -216,9 +221,21 @@ export default function Events() {
                       // Register Button for users
                       <button
                         onClick={() => handleRegister(event._id)}
-                        className="mt-6 btn-eco w-full md:w-auto"
+                        disabled={registering === event._id}
+                        className={`mt-6 btn-eco w-full md:w-auto ${
+                          registering === event._id
+                            ? "opacity-70 cursor-not-allowed"
+                            : ""
+                        }`}
                       >
-                        Register Now →
+                        {registering === event._id ? (
+                          <span className="flex items-center gap-2">
+                            <span className="loading loading-spinner loading-sm"></span>
+                            Registering...
+                          </span>
+                        ) : (
+                          "Register Now →"
+                        )}
                       </button>
                     )}
                   </motion.div>
