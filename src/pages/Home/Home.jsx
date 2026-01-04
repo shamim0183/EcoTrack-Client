@@ -189,16 +189,14 @@ export default function Home() {
                       {tip.title}
                     </h3>
                     <p className="text-sm text-gray-600 mb-3">
-                      By {tip.authorName} •{" "}
-                      {new Date(tip.createdAt).toLocaleDateString()}
+                      By {tip.authorName}
                     </p>
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-1 text-eco-primary">
-                        <span>👍</span>
-                        <span className="font-semibold">{tip.upvotes}</span>
-                      </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-500">
+                        {new Date(tip.createdAt).toLocaleDateString()}
+                      </span>
                       {tip.category && (
-                        <span className="px-2 py-1 bg-eco-sand text-eco-primary text-xs rounded-full font-medium">
+                        <span className="px-3 py-1 bg-eco-sand text-eco-primary text-xs rounded-full font-medium">
                           {tip.category}
                         </span>
                       )}

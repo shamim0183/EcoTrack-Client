@@ -234,15 +234,6 @@ export default function Tips() {
 
                   <div className="flex flex-col gap-3">
                     <div className="flex items-center gap-4">
-                      <button
-                        onClick={() => handleLike(tip._id)}
-                        className="flex items-center gap-2 text-eco-primary hover:text-eco-primary-dark transition-colors"
-                      >
-                        <span>👍</span>
-                        <span className="font-semibold">
-                          {tip.upvotes || 0}
-                        </span>
-                      </button>
                       {tip.category && (
                         <span className="px-3 py-1 bg-eco-sand text-eco-primary text-sm rounded-full font-medium">
                           {tip.category}
